@@ -4,6 +4,9 @@
  */
 
 import { NextResponse } from "next/server";
+
+// 동적 라우트로 명시 (cookies 사용)
+export const dynamic = 'force-dynamic';
 import { cookies } from "next/headers";
 import { analyzeEmotion } from "@/lib/ai/openai";
 import { EmotionAnalysisRequestSchema } from "@/lib/contracts/emotion";

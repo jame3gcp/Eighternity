@@ -225,7 +225,8 @@ export async function getEmotionAnalysesByPeriod(
   const start = new Date(startDate);
   const end = new Date(endDate);
   
-  for (const [key, archive] of memoryStore.entries()) {
+  // Array.from()을 사용하여 MapIterator를 배열로 변환
+  for (const [key, archive] of Array.from(memoryStore.entries())) {
     if (key.startsWith(`${userId}-`)) {
       const archiveDate = new Date(archive.date);
       if (archiveDate >= start && archiveDate <= end) {

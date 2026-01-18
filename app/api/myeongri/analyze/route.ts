@@ -10,6 +10,9 @@ import { analyzeTenGods } from "@/lib/engine/tenGods";
 import { calculateDaeun, calculateSeun, calculateRelationships } from "@/lib/engine/luck";
 import { analyzeMyeongri, MyeongriAnalysisRequest } from "@/lib/ai/openai";
 
+// 동적 라우트로 명시 (cookies 사용)
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
   try {
     const cookieStore = cookies();

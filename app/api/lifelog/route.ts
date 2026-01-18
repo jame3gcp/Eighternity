@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 import { LifeLogRequestSchema, LifeLogResponseSchema } from "@/lib/contracts/lifelog";
 import { lifelogStore } from "@/lib/storage/lifelogStore";
 
+// 동적 라우트로 명시 (cookies 사용)
+export const dynamic = 'force-dynamic';
+
 /**
  * 라이프 로그 저장/조회 API
  * GET: 오늘의 라이프 로그 조회

@@ -106,7 +106,7 @@ export default function ProfilePage() {
             <Badge variant="default" className="px-3">Ten Gods</Badge>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-            {Object.entries(data.tenGods)
+            {(Object.entries(data.tenGods) as [string, number][])
               .filter(([_, count]) => count > 0)
               .sort(([_, a], [__, b]) => b - a)
               .map(([name, count]) => (

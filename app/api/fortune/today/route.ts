@@ -2,6 +2,9 @@ import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
 import { ruleEngine } from "../../../../lib/engine/ruleEngine";
 
+// 동적 라우트로 명시 (cookies 사용)
+export const dynamic = 'force-dynamic';
+
 export async function GET() {
   try {
     const cookieStore = cookies();

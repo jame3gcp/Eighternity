@@ -5,8 +5,8 @@
 
 "use client";
 
-import { BehaviorCorrelation } from "@/lib/contracts/emotion";
-import { EmotionType, emotionLabels } from "./EmotionWaveGraph";
+import { BehaviorCorrelation, EmotionType } from "@/lib/contracts/emotion";
+import { emotionLabels } from "./EmotionWaveGraph";
 import { cn } from "@/lib/utils";
 
 interface BehaviorHeatmapProps {

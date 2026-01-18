@@ -3,6 +3,9 @@ import { NextResponse } from "next/server";
 import { ruleEngine } from "../../../../lib/engine/ruleEngine";
 import { QuestionCategorySchema } from "../../../../lib/contracts/fortune";
 
+// 동적 라우트로 명시 (cookies 사용)
+export const dynamic = 'force-dynamic';
+
 export async function POST(request: Request) {
   try {
     const { category } = await request.json();

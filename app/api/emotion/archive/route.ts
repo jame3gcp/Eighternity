@@ -8,6 +8,9 @@ import { cookies } from "next/headers";
 import { getEmotionAnalysis, getEmotionAnalysesByPeriod } from "@/lib/storage/emotionStore";
 import { getOrCreateUserId } from "@/lib/storage/userStore";
 
+// 동적 라우트로 명시 (cookies 사용)
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: Request) {
   try {
     const cookieStore = cookies();

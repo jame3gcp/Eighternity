@@ -5,6 +5,9 @@ import { getSajuProfile } from "@/lib/engine/sajuEngine";
 import { HybridRecommendationRequestSchema, LifeLogRequest } from "@/lib/contracts/lifelog";
 import { lifelogStore } from "@/lib/storage/lifelogStore";
 
+// 동적 라우트로 명시 (cookies 사용)
+export const dynamic = 'force-dynamic';
+
 /**
  * 하이브리드 추천 API
  * 사주 + 라이프 로그를 결합한 추천을 제공합니다.
