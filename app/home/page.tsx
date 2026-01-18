@@ -6,7 +6,7 @@ import { MetricCard } from "../../components/MetricCard";
 import { DoDontCard } from "../../components/DoDontCard";
 import { LifeLogForm } from "../../components/LifeLogForm";
 import { HybridRecommendationResponse } from "../../lib/contracts/lifelog";
-import { Briefcase, Heart, Coins, Activity, Info, Sparkles, CheckCircle, Edit3, X } from "lucide-react";
+import { Briefcase, Heart, Coins, Activity, Info, Sparkles, CheckCircle, Edit3, X, MoreHorizontal, Share2 } from "lucide-react";
 
 import { Skeleton } from "../../components/Skeleton";
 import { ShareButton } from "../../components/ShareButton";
@@ -39,173 +39,165 @@ export default function HomePage() {
 
   const handleLifeLogSuccess = () => {
     setShowLifeLogForm(false);
-    fetchHybridFortune(); // 데이터 새로고침
+    fetchHybridFortune();
   };
 
   if (error) return (
-    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 animate-enter">
-      <div className="w-16 h-16 bg-warning/10 text-warning rounded-[2rem] flex items-center justify-center">
-        <Activity size={32} />
+    <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 px-4">
+      <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center">
+        <Activity size={32} className="text-gray-400" />
       </div>
       <div className="text-center space-y-2">
-        <h3 className="text-xl font-black text-slate-900 tracking-tight">연결이 고르지 않아요</h3>
-        <p className="text-sm text-slate-500 font-bold uppercase tracking-wide">잠시 숨 고르고 다시 시도해요</p>
+        <h3 className="text-lg font-semibold text-gray-900">연결이 고르지 않아요</h3>
+        <p className="text-sm text-gray-500">잠시 후 다시 시도해주세요</p>
       </div>
       <button 
         onClick={() => window.location.reload()}
-        className="px-8 py-4 bg-primary text-white rounded-[2rem] font-black uppercase tracking-widest shadow-xl shadow-primary/20 active:scale-95 transition-all"
+        className="px-6 py-3 bg-gray-900 text-white rounded-full font-medium text-sm hover:bg-gray-800 transition-colors"
       >
-        Retry
+        다시 시도
       </button>
     </div>
   );
 
   if (!data) return (
-    <div className="flex flex-col gap-10 pb-10">
-      <header>
-        <Skeleton className="h-9 w-40 mb-2" />
+    <div className="flex flex-col gap-4 pb-10">
+      <div className="px-4 py-3">
+        <Skeleton className="h-6 w-32 mb-2" />
         <Skeleton className="h-4 w-24" />
-      </header>
-      <Skeleton className="h-[400px] w-full rounded-[2rem]" />
-      <div className="grid grid-cols-2 gap-4">
-        <Skeleton className="h-32 w-full rounded-[1.5rem]" />
-        <Skeleton className="h-32 w-full rounded-[1.5rem]" />
-        <Skeleton className="h-32 w-full rounded-[1.5rem]" />
-        <Skeleton className="h-32 w-full rounded-[1.5rem]" />
+      </div>
+      <div className="px-4">
+        <Skeleton className="h-[300px] w-full rounded-2xl" />
+      </div>
+      <div className="grid grid-cols-2 gap-3 px-4">
+        <Skeleton className="h-24 w-full rounded-xl" />
+        <Skeleton className="h-24 w-full rounded-xl" />
+        <Skeleton className="h-24 w-full rounded-xl" />
+        <Skeleton className="h-24 w-full rounded-xl" />
       </div>
     </div>
   );
 
   return (
-    <div className="flex flex-col gap-10 pb-10">
-      <header className="flex justify-between items-end">
-        <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tighter">오늘의 나침반</h1>
-          <p className="text-sm text-slate-500 font-bold mt-1 uppercase tracking-wide">Daily Compass Guide</p>
-        </div>
-        <div className="flex gap-2.5">
-          <button
-            onClick={() => setShowLifeLogForm(!showLifeLogForm)}
-            className={`group relative px-5 py-2.5 rounded-2xl transition-all duration-300 flex items-center gap-2 overflow-hidden ${
-              hasLifeLog
-                ? "bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200/60 text-indigo-700 shadow-md shadow-indigo-500/10"
-                : "bg-white/80 backdrop-blur-sm border border-slate-200/60 text-slate-700 hover:border-indigo-300/60 hover:bg-gradient-to-br hover:from-indigo-50/50 hover:to-purple-50/50 hover:shadow-md hover:shadow-indigo-500/10"
-            } hover:scale-[1.02] active:scale-[0.98]`}
-          >
-            <span className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <span className="relative z-10 flex items-center gap-2">
-              {showLifeLogForm ? (
-                <>
-                  <X size={16} className="transition-transform duration-300 group-hover:rotate-90" />
-                  <span className="text-xs font-black uppercase tracking-wide">닫기</span>
-                </>
-              ) : (
-                <>
-                  <Edit3 size={16} className="transition-transform duration-300 group-hover:scale-110" />
-                  <span className="text-xs font-black uppercase tracking-wide">
-                    {hasLifeLog ? "수정" : "입력"}
-                  </span>
-                </>
-              )}
-            </span>
-          </button>
-          <ShareButton 
-            title="Eighternity - 오늘의 나침반" 
-            text={data.hybridRecommendation.mainMessage} 
-            className="px-5 py-2.5 rounded-2xl"
-          />
-        </div>
-      </header>
-
-      {/* 라이프 로그 입력 폼 */}
+    <div className="flex flex-col">
+      {/* 라이프 로그 입력 폼 - 스레드 스타일 */}
       {showLifeLogForm && (
-        <section className="glass-card p-6 rounded-[2rem] border-2 border-primary/20 bg-gradient-to-br from-primary/5 to-purple-500/5 animate-enter">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-10 h-10 rounded-xl bg-primary text-white flex items-center justify-center">
-              <Edit3 size={20} />
+        <div className="thread-card border-b-2 border-gray-200">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-10 h-10 rounded-full bg-gray-100 flex items-center justify-center">
+              <Edit3 size={18} className="text-gray-600" />
             </div>
-            <div>
-              <h3 className="text-lg font-black text-slate-900">오늘의 상태 기록</h3>
-              <p className="text-xs text-slate-500 font-bold uppercase tracking-wide">더 정확한 추천을 위해 입력해주세요</p>
+            <div className="flex-1">
+              <h3 className="text-sm font-semibold text-gray-900">오늘의 상태 기록</h3>
+              <p className="text-xs text-gray-500">더 정확한 추천을 위해 입력해주세요</p>
             </div>
+            <button
+              onClick={() => setShowLifeLogForm(false)}
+              className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors"
+            >
+              <X size={18} className="text-gray-500" />
+            </button>
           </div>
           <LifeLogForm onSuccess={handleLifeLogSuccess} onCancel={() => setShowLifeLogForm(false)} />
-        </section>
-      )}
-
-      {/* 하이브리드 추천 배지 */}
-      {data.lifeLogAnalysis.hasData && (
-        <div className="glass-card p-4 rounded-2xl border border-primary/20 bg-gradient-to-r from-primary/5 to-purple-500/5 flex items-center gap-3">
-          <div className="w-8 h-8 rounded-xl bg-primary/20 text-primary flex items-center justify-center">
-            <Sparkles size={16} />
-          </div>
-          <div className="flex-1">
-            <p className="text-sm font-black text-slate-900">하이브리드 추천 활성화</p>
-            <p className="text-xs text-slate-500">사주 + 실제 생활 데이터를 결합한 맞춤 추천입니다</p>
-          </div>
         </div>
       )}
 
-      <section className="animate-enter">
-        <CompassCard 
-          score={Math.round(
-            (data.adjustedScores.work + 
-             data.adjustedScores.love + 
-             data.adjustedScores.money + 
-             data.adjustedScores.health) / 4
-          )} 
-          message={data.hybridRecommendation.mainMessage} 
-        />
-      </section>
+      {/* 메인 추천 카드 - 스레드 스타일 */}
+      <div className="thread-card">
+        <div className="flex items-start gap-3 mb-4">
+          <div className="w-10 h-10 rounded-full bg-gradient-to-br from-indigo-500 to-purple-500 flex items-center justify-center flex-shrink-0">
+            <Sparkles size={18} className="text-white" />
+          </div>
+          <div className="flex-1 min-w-0">
+            <div className="flex items-center gap-2 mb-1">
+              <span className="text-sm font-semibold text-gray-900">오늘의 나침반</span>
+              <span className="text-xs text-gray-500">·</span>
+              <span className="text-xs text-gray-500">지금</span>
+            </div>
+            <p className="text-sm text-gray-500 mb-3">{data.hybridRecommendation.mainMessage}</p>
+            
+            {/* 점수 표시 */}
+            <div className="flex items-center gap-4 mb-4">
+              <div className="flex items-center gap-1">
+                <div className="w-2 h-2 rounded-full bg-green-500"></div>
+                <span className="text-xs font-medium text-gray-700">
+                  {Math.round((data.adjustedScores.work + data.adjustedScores.love + data.adjustedScores.money + data.adjustedScores.health) / 4)}점
+                </span>
+              </div>
+              {data.lifeLogAnalysis.hasData && (
+                <span className="text-xs text-indigo-600 font-medium">하이브리드 추천</span>
+              )}
+            </div>
 
-      <section>
-        <div className="flex items-center justify-between px-1 mb-5">
-          <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Domain Energy</h3>
-          <div className="h-[1px] flex-grow mx-4 bg-slate-100"></div>
+            {/* 액션 버튼 */}
+            <div className="flex items-center gap-4 pt-2 border-t border-gray-100">
+              <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
+                <Share2 size={18} />
+                <span className="text-xs font-medium">공유</span>
+              </button>
+              <button 
+                onClick={() => setShowLifeLogForm(!showLifeLogForm)}
+                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                <Edit3 size={18} />
+                <span className="text-xs font-medium">{hasLifeLog ? "수정" : "입력"}</span>
+              </button>
+            </div>
+          </div>
+          <button className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors flex-shrink-0">
+            <MoreHorizontal size={18} className="text-gray-500" />
+          </button>
         </div>
-        <div className="grid grid-cols-2 gap-4">
+      </div>
+
+      {/* 도메인 점수 카드 */}
+      <div className="thread-card">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-semibold text-gray-900">도메인 에너지</h3>
+        </div>
+        <div className="grid grid-cols-2 gap-3">
           <MetricCard title="직업운" score={data.adjustedScores.work} icon={Briefcase} />
           <MetricCard title="애정운" score={data.adjustedScores.love} icon={Heart} />
           <MetricCard title="재물운" score={data.adjustedScores.money} icon={Coins} />
           <MetricCard title="건강운" score={data.adjustedScores.health} icon={Activity} />
         </div>
-      </section>
+      </div>
 
-      <section>
-        <div className="flex items-center justify-between px-1 mb-5">
-          <h3 className="text-xs font-black text-slate-400 uppercase tracking-[0.2em]">Guide & Focus</h3>
-          <div className="h-[1px] flex-grow mx-4 bg-slate-100"></div>
+      {/* 추천 가이드 카드 */}
+      <div className="thread-card">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-semibold text-gray-900">오늘의 가이드</h3>
         </div>
         <DoDontCard recommend={data.hybridRecommendation.recommend} avoid={data.hybridRecommendation.avoid} />
         
-        {/* 추천 이유 표시 */}
         {data.hybridRecommendation.reasoning && (
-          <div className="mt-4 glass-card p-4 rounded-2xl border border-slate-200 bg-slate-50/50">
-            <div className="flex items-start gap-3">
-              <Info size={18} className="text-primary mt-0.5 flex-shrink-0" />
+          <div className="mt-4 pt-4 border-t border-gray-100">
+            <div className="flex items-start gap-2">
+              <Info size={16} className="text-gray-400 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs font-black text-slate-700 uppercase tracking-wide mb-1">추천 이유</p>
-                <p className="text-sm text-slate-600 leading-relaxed">{data.hybridRecommendation.reasoning}</p>
+                <p className="text-xs font-medium text-gray-500 mb-1">추천 이유</p>
+                <p className="text-sm text-gray-700 leading-relaxed">{data.hybridRecommendation.reasoning}</p>
               </div>
             </div>
           </div>
         )}
-      </section>
+      </div>
 
-      <section className="glass-card p-8 bg-gradient-to-br from-primary/10 to-purple-500/10 border-primary/20">
-        <div className="flex items-center gap-4 mb-6">
-          <div className="w-12 h-12 rounded-[1.2rem] bg-white/80 text-primary flex items-center justify-center shadow-xl shadow-primary/10 border border-white backdrop-blur-sm">
-            <CheckCircle size={24} strokeWidth={1.5} />
+      {/* 루틴 카드 */}
+      <div className="thread-card">
+        <div className="flex items-center gap-3 mb-3">
+          <div className="w-10 h-10 rounded-full bg-indigo-100 flex items-center justify-center">
+            <CheckCircle size={18} className="text-indigo-600" />
           </div>
           <div>
-            <h3 className="text-lg font-black text-slate-900 leading-none tracking-tight">오늘의 작은 루틴</h3>
-            <p className="text-[10px] text-primary font-black uppercase tracking-[0.2em] mt-1.5">5 Minute Routine</p>
+            <h3 className="text-sm font-semibold text-gray-900">오늘의 작은 루틴</h3>
+            <p className="text-xs text-gray-500">5분 루틴</p>
           </div>
         </div>
-        <p className="text-slate-700 text-base font-medium leading-[1.6] break-keep">
-          내면의 {data.adjustedScores.work > 60 ? "활기를 유지하기 위해" : "균형을 찾기 위해"} 오늘은 <span className="text-primary font-black underline underline-offset-4 decoration-primary/30">점심 식사 후 5분간 가벼운 스트레칭</span>을 해보세요.
+        <p className="text-sm text-gray-700 leading-relaxed">
+          내면의 {data.adjustedScores.work > 60 ? "활기를 유지하기 위해" : "균형을 찾기 위해"} 오늘은 <span className="font-semibold text-gray-900">점심 식사 후 5분간 가벼운 스트레칭</span>을 해보세요.
         </p>
-      </section>
+      </div>
     </div>
   );
 }

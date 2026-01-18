@@ -37,47 +37,45 @@ export default function OnboardingPage() {
   };
 
   return (
-    <div className="flex flex-col gap-10 pt-12 pb-10 min-h-screen animate-enter">
-      <div className="space-y-6">
-        <div className="w-14 h-14 bg-primary rounded-[2rem] flex items-center justify-center text-white shadow-2xl shadow-primary/30">
-          <Sparkles size={28} />
+    <div className="flex flex-col gap-8 pt-8 pb-10 min-h-screen px-4 animate-enter">
+      <div className="space-y-4">
+        <div className="w-12 h-12 bg-gray-900 rounded-full flex items-center justify-center">
+          <Sparkles size={24} className="text-white" />
         </div>
-        <div className="space-y-3">
-          <h1 className="text-4xl font-black text-slate-900 leading-[1.1] tracking-tighter">
+        <div className="space-y-2">
+          <h1 className="text-3xl font-bold text-gray-900 leading-[1.2]">
             당신의 하루를<br />
             더 쉽게.
           </h1>
-          <p className="text-slate-500 text-lg font-bold uppercase tracking-wide">Enter your birth info</p>
+          <p className="text-gray-500 text-sm">생년월일을 입력해주세요</p>
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-10 animate-enter delay-100">
-        <div className="space-y-8">
-          <div className="space-y-3">
-            <label className="text-xs font-black text-slate-400 flex items-center gap-2 uppercase tracking-[0.2em]">
-              <Calendar size={14} />
+      <form onSubmit={handleSubmit} className="flex flex-col gap-8 animate-enter delay-100">
+        <div className="space-y-6">
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+              <Calendar size={16} />
               생년월일
             </label>
-            <div className="relative group">
-              <input
-                required
-                type="date"
-                className="w-full p-6 bg-white border border-slate-100 rounded-[2rem] text-xl font-black text-slate-900 shadow-sm focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all appearance-none"
-                value={formData.birthDate}
-                onChange={(e) => setFormData({ ...formData, birthDate: e.target.value })}
-              />
-            </div>
+            <input
+              required
+              type="date"
+              className="w-full p-4 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none transition-all"
+              value={formData.birthDate}
+              onChange={(e) => setFormData({ ...formData, birthDate: e.target.value })}
+            />
           </div>
 
-          <div className="space-y-3">
-            <label className="text-xs font-black text-slate-400 flex items-center gap-2 uppercase tracking-[0.2em]">
-              <Clock size={14} />
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+              <Clock size={16} />
               태어난 시간
             </label>
-            <div className="flex flex-col gap-4">
+            <div className="flex flex-col gap-3">
               <input
                 type="time"
-                className="w-full p-6 bg-white border border-slate-100 rounded-[2rem] text-xl font-black text-slate-900 shadow-sm focus:ring-4 focus:ring-primary/10 focus:border-primary outline-none transition-all appearance-none disabled:bg-slate-50 disabled:text-slate-200"
+                className="w-full p-4 bg-white border border-gray-200 rounded-xl text-base font-medium text-gray-900 focus:ring-2 focus:ring-gray-900 focus:border-gray-900 outline-none transition-all disabled:bg-gray-50 disabled:text-gray-400"
                 disabled={formData.birthTime === null}
                 value={formData.birthTime || ""}
                 onChange={(e) => setFormData({ ...formData, birthTime: e.target.value })}
@@ -87,7 +85,7 @@ export default function OnboardingPage() {
                   type="button"
                   active={formData.birthTime === null}
                   onClick={() => setFormData({ ...formData, birthTime: null })}
-                  className="flex-grow rounded-[1.5rem] py-4"
+                  className="flex-grow py-3 rounded-xl"
                 >
                   시간 모름
                 </Chip>
@@ -95,7 +93,7 @@ export default function OnboardingPage() {
                   type="button"
                   active={formData.birthTime !== null}
                   onClick={() => setFormData({ ...formData, birthTime: "12:00" })}
-                  className="flex-grow rounded-[1.5rem] py-4"
+                  className="flex-grow py-3 rounded-xl"
                 >
                   시간 선택
                 </Chip>
@@ -104,26 +102,23 @@ export default function OnboardingPage() {
           </div>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-4">
           <button
             type="submit"
             disabled={isLoading}
-            className="group relative w-full p-6 bg-gradient-to-br from-indigo-600 via-purple-600 to-rose-500 text-white rounded-[2rem] font-black text-xl shadow-2xl shadow-indigo-500/40 active:scale-[0.98] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 overflow-hidden"
+            className="w-full p-4 bg-gray-900 text-white rounded-xl font-semibold text-base active:scale-[0.98] transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-800"
           >
-            <span className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-            <span className="relative z-10 flex items-center gap-3">
-              {isLoading ? (
-                <span className="animate-pulse">Analyzing...</span>
-              ) : (
-                <>
-                  <span>시작하기</span>
-                  <ArrowRight size={24} className="transition-transform duration-300 group-hover:translate-x-1" />
-                </>
-              )}
-            </span>
+            {isLoading ? (
+              <span className="animate-pulse">분석 중...</span>
+            ) : (
+              <>
+                <span>시작하기</span>
+                <ArrowRight size={20} />
+              </>
+            )}
           </button>
-          <p className="text-center text-xs text-slate-400 font-bold leading-relaxed px-4">
-            “결정은 당신의 몫, 우리는 방향만 제안해요”<br />
+          <p className="text-center text-xs text-gray-500 leading-relaxed px-4">
+            "결정은 당신의 몫, 우리는 방향만 제안해요"<br />
             개인정보는 분석 목적으로만 안전하게 사용됩니다.
           </p>
         </div>

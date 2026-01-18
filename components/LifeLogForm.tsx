@@ -98,14 +98,14 @@ export function LifeLogForm({ date, onSuccess, onCancel }: LifeLogFormProps) {
   return (
     <form onSubmit={handleSubmit} className="space-y-8">
       {error && (
-        <div className="bg-rose-50 border border-rose-200 text-rose-700 px-4 py-3 rounded-2xl text-sm font-medium">
+        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl text-sm font-medium">
           {error}
         </div>
       )}
 
       {/* 기분 */}
       <div>
-        <label className="block text-sm font-black text-slate-700 mb-3 uppercase tracking-wide">
+        <label className="block text-sm font-semibold text-gray-900 mb-3">
           오늘의 기분
         </label>
         <div className="grid grid-cols-5 gap-2">
@@ -114,14 +114,14 @@ export function LifeLogForm({ date, onSuccess, onCancel }: LifeLogFormProps) {
               key={option.value}
               type="button"
               onClick={() => setMood(option.value)}
-              className={`p-4 rounded-2xl border-2 transition-all ${
+              className={`p-3 rounded-xl border transition-all ${
                 mood === option.value
-                  ? "border-primary bg-primary/10 shadow-lg scale-105"
-                  : "border-slate-200 bg-white hover:border-primary/50"
+                  ? "border-gray-900 bg-gray-900 text-white"
+                  : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
               }`}
             >
               <div className="text-2xl mb-1">{option.emoji}</div>
-              <div className="text-xs font-bold text-slate-700">{option.label}</div>
+              <div className="text-xs font-medium">{option.label}</div>
             </button>
           ))}
         </div>
@@ -129,7 +129,7 @@ export function LifeLogForm({ date, onSuccess, onCancel }: LifeLogFormProps) {
 
       {/* 컨디션 */}
       <div>
-        <label className="block text-sm font-black text-slate-700 mb-3 uppercase tracking-wide">
+        <label className="block text-sm font-semibold text-gray-900 mb-3">
           컨디션
         </label>
         <div className="grid grid-cols-5 gap-2">
@@ -138,14 +138,14 @@ export function LifeLogForm({ date, onSuccess, onCancel }: LifeLogFormProps) {
               key={option.value}
               type="button"
               onClick={() => setCondition(option.value)}
-              className={`p-4 rounded-2xl border-2 transition-all ${
+              className={`p-3 rounded-xl border transition-all ${
                 condition === option.value
-                  ? "border-primary bg-primary/10 shadow-lg scale-105"
-                  : "border-slate-200 bg-white hover:border-primary/50"
+                  ? "border-gray-900 bg-gray-900 text-white"
+                  : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
               }`}
             >
               <div className="text-2xl mb-1">{option.emoji}</div>
-              <div className="text-xs font-bold text-slate-700">{option.label}</div>
+              <div className="text-xs font-medium">{option.label}</div>
             </button>
           ))}
         </div>
@@ -153,7 +153,7 @@ export function LifeLogForm({ date, onSuccess, onCancel }: LifeLogFormProps) {
 
       {/* 수면 */}
       <div>
-        <label className="block text-sm font-black text-slate-700 mb-3 uppercase tracking-wide">
+        <label className="block text-sm font-semibold text-gray-900 mb-3">
           수면 품질
         </label>
         <div className="grid grid-cols-5 gap-2">
@@ -162,14 +162,14 @@ export function LifeLogForm({ date, onSuccess, onCancel }: LifeLogFormProps) {
               key={option.value}
               type="button"
               onClick={() => setSleep(option.value)}
-              className={`p-4 rounded-2xl border-2 transition-all ${
+              className={`p-3 rounded-xl border transition-all ${
                 sleep === option.value
-                  ? "border-primary bg-primary/10 shadow-lg scale-105"
-                  : "border-slate-200 bg-white hover:border-primary/50"
+                  ? "border-gray-900 bg-gray-900 text-white"
+                  : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
               }`}
             >
               <div className="text-2xl mb-1">{option.emoji}</div>
-              <div className="text-xs font-bold text-slate-700">{option.label}</div>
+              <div className="text-xs font-medium">{option.label}</div>
             </button>
           ))}
         </div>
@@ -177,7 +177,7 @@ export function LifeLogForm({ date, onSuccess, onCancel }: LifeLogFormProps) {
 
       {/* 일정 */}
       <div>
-        <label className="block text-sm font-black text-slate-700 mb-3 uppercase tracking-wide">
+        <label className="block text-sm font-semibold text-gray-900 mb-3">
           오늘의 일정
         </label>
         <div className="grid grid-cols-5 gap-2">
@@ -186,14 +186,14 @@ export function LifeLogForm({ date, onSuccess, onCancel }: LifeLogFormProps) {
               key={option.value}
               type="button"
               onClick={() => setSchedule(option.value)}
-              className={`p-4 rounded-2xl border-2 transition-all ${
+              className={`p-3 rounded-xl border transition-all ${
                 schedule === option.value
-                  ? "border-primary bg-primary/10 shadow-lg scale-105"
-                  : "border-slate-200 bg-white hover:border-primary/50"
+                  ? "border-gray-900 bg-gray-900 text-white"
+                  : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
               }`}
             >
               <div className="text-2xl mb-1">{option.emoji}</div>
-              <div className="text-xs font-bold text-slate-700">{option.label}</div>
+              <div className="text-xs font-medium">{option.label}</div>
             </button>
           ))}
         </div>
@@ -201,14 +201,14 @@ export function LifeLogForm({ date, onSuccess, onCancel }: LifeLogFormProps) {
 
       {/* 메모 */}
       <div>
-        <label className="block text-sm font-black text-slate-700 mb-3 uppercase tracking-wide">
+        <label className="block text-sm font-semibold text-gray-900 mb-3">
           추가 메모 (선택)
         </label>
         <textarea
           value={notes}
           onChange={(e) => setNotes(e.target.value)}
           placeholder="오늘 하루에 대한 특별한 메모를 남겨보세요..."
-          className="w-full px-4 py-3 rounded-2xl border-2 border-slate-200 focus:border-primary focus:outline-none resize-none text-sm"
+          className="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-gray-900 focus:outline-none resize-none text-sm bg-white"
           rows={3}
         />
       </div>

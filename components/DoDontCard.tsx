@@ -9,27 +9,23 @@ interface DoDontCardProps {
 
 export const DoDontCard = ({ recommend, avoid, className }: DoDontCardProps) => {
   return (
-    <div className={cn("grid grid-cols-1 gap-4", className)}>
-      <div className="group p-5 bg-white border border-success/20 rounded-[2rem] shadow-sm hover:shadow-md transition-all">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="p-2 bg-success/10 rounded-xl text-success">
-            <CheckCircle2 size={18} />
-          </div>
-          <span className="text-xs font-black text-success uppercase tracking-widest">Recommended Action</span>
+    <div className={cn("space-y-3", className)}>
+      <div className="p-4 bg-green-50 border border-green-200 rounded-xl">
+        <div className="flex items-center gap-2 mb-2">
+          <CheckCircle2 size={16} className="text-green-600" />
+          <span className="text-xs font-semibold text-green-700">추천</span>
         </div>
-        <p className="text-slate-800 font-bold leading-relaxed">
+        <p className="text-sm text-gray-900 leading-relaxed">
           {recommend}
         </p>
       </div>
 
-      <div className="group p-5 bg-white border border-warning/20 rounded-[2rem] shadow-sm hover:shadow-md transition-all">
-        <div className="flex items-center gap-3 mb-3">
-          <div className="p-2 bg-warning/10 rounded-xl text-warning">
-            <AlertCircle size={18} />
-          </div>
-          <span className="text-xs font-black text-warning uppercase tracking-widest">Mindful Attention</span>
+      <div className="p-4 bg-orange-50 border border-orange-200 rounded-xl">
+        <div className="flex items-center gap-2 mb-2">
+          <AlertCircle size={16} className="text-orange-600" />
+          <span className="text-xs font-semibold text-orange-700">주의</span>
         </div>
-        <p className="text-slate-800 font-bold leading-relaxed">
+        <p className="text-sm text-gray-900 leading-relaxed">
           {avoid}
         </p>
       </div>

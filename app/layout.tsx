@@ -26,20 +26,20 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${inter.className} selection:bg-indigo-100`}>
-        <div className="mobile-container flex flex-col min-h-screen border-x border-white/20">
-          <header className="sticky top-0 z-30 w-full bg-white/40 backdrop-blur-3xl border-b border-white/30 px-8 py-5 flex justify-between items-center shadow-sm shadow-indigo-500/5">
-            <span className="text-2xl font-black bg-clip-text text-transparent bg-gradient-to-br from-indigo-600 via-purple-600 to-rose-500 tracking-tighter">
+        <div className="mobile-container flex flex-col min-h-screen">
+          <header className="sticky top-0 z-30 w-full bg-white/95 backdrop-blur-xl border-b border-gray-200 px-4 py-3 flex justify-between items-center">
+            <span className="text-xl font-bold text-gray-900 tracking-tight">
               Eighternity
             </span>
             <Link 
               href="/profile"
-              className="w-11 h-11 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-100/50 shadow-md shadow-indigo-500/10 flex items-center justify-center text-indigo-600 hover:scale-110 hover:shadow-lg hover:shadow-indigo-500/20 transition-all duration-300"
+              className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-200 transition-colors duration-200"
             >
-              <User size={20} strokeWidth={2.5} />
+              <User size={18} strokeWidth={2} />
             </Link>
           </header>
 
-          <main className="flex-grow px-8 py-8 overflow-y-auto pb-36">
+          <main className="flex-grow overflow-y-auto pb-20">
             {children}
           </main>
           

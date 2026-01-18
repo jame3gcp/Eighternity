@@ -41,24 +41,21 @@ export const ShareButton = ({ title, text, className }: ShareButtonProps) => {
     <button
       onClick={handleShare}
       className={cn(
-        "group relative flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200/60 text-indigo-700 font-black text-xs uppercase tracking-[0.15em] shadow-md shadow-slate-200/50 hover:shadow-xl hover:shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 overflow-hidden",
+        "flex items-center gap-2 px-4 py-2 rounded-xl bg-white border border-gray-200 text-gray-700 font-medium text-sm hover:bg-gray-50 transition-colors duration-200",
         className
       )}
     >
-      <span className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-      <span className="relative z-10 flex items-center gap-2">
-        {copied ? (
-          <>
-            <Check size={16} className="text-green-600 transition-transform duration-300 scale-110" />
-            <span>Copied</span>
-          </>
-        ) : (
-          <>
-            <Share2 size={16} className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
-            <span>Share</span>
-          </>
-        )}
-      </span>
+      {copied ? (
+        <>
+          <Check size={16} className="text-green-600" />
+          <span>복사됨</span>
+        </>
+      ) : (
+        <>
+          <Share2 size={16} />
+          <span>공유</span>
+        </>
+      )}
     </button>
   );
 };

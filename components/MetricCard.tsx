@@ -19,23 +19,29 @@ export const MetricCard = ({ title, score, icon: Icon, className }: MetricCardPr
 
   return (
     <div className={cn(
-      "glass-card p-6 flex flex-col gap-4 transition-all duration-500 hover:scale-[1.02] active:scale-[0.98] border-white/60",
+      "bg-white border border-gray-200 rounded-xl p-4 flex flex-col gap-3 transition-colors hover:bg-gray-50",
       className
     )}>
-      <div className="flex justify-between items-start">
-        <div className="p-3.5 rounded-[1.2rem] bg-white/80 border border-white/40 text-slate-400 shadow-sm backdrop-blur-sm">
-          <Icon size={24} strokeWidth={1.5} className="text-primary/60" />
+      <div className="flex justify-between items-center">
+        <div className="w-10 h-10 rounded-lg bg-gray-100 flex items-center justify-center">
+          <Icon size={20} className="text-gray-600" />
         </div>
-        <div className={cn("px-3 py-1 rounded-full text-xs font-black border backdrop-blur-md", styles)}>
+        <div className={cn("px-2.5 py-1 rounded-full text-xs font-semibold", 
+          score >= 70 ? "bg-green-100 text-green-700" : 
+          score >= 40 ? "bg-blue-100 text-blue-700" : 
+          "bg-orange-100 text-orange-700"
+        )}>
           {score}
         </div>
       </div>
-      <div className="space-y-3">
-        <h4 className="text-sm font-black text-slate-800 uppercase tracking-widest">{title}</h4>
-        <div className="w-full h-2 bg-slate-100/50 rounded-full overflow-hidden p-[1px] border border-slate-200/30">
+      <div className="space-y-2">
+        <h4 className="text-xs font-semibold text-gray-900">{title}</h4>
+        <div className="w-full h-1.5 bg-gray-100 rounded-full overflow-hidden">
           <div 
-            className={cn("h-full rounded-full transition-all duration-1000 ease-out shadow-[0_0_8px_rgba(0,0,0,0.1)]", 
-              score >= 70 ? "bg-success" : score >= 40 ? "bg-primary" : "bg-warning"
+            className={cn("h-full rounded-full transition-all duration-1000 ease-out", 
+              score >= 70 ? "bg-green-500" : 
+              score >= 40 ? "bg-blue-500" : 
+              "bg-orange-500"
             )}
             style={{ width: `${score}%` }}
           />

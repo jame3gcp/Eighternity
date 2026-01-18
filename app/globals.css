@@ -38,7 +38,7 @@
 }
 
 body {
-  background-color: #f8fafc;
+  background-color: #ffffff;
   color: hsl(var(--foreground));
   min-height: 100vh;
   font-feature-settings: "ss01", "ss02", "cv01", "cv02";
@@ -53,12 +53,7 @@ body::before {
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: 
-    radial-gradient(circle at 0% 0%, hsla(238, 77%, 62%, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 100% 0%, hsla(280, 80%, 60%, 0.12) 0%, transparent 40%),
-    radial-gradient(circle at 100% 100%, hsla(350, 89%, 60%, 0.08) 0%, transparent 40%),
-    radial-gradient(circle at 0% 100%, hsla(217, 91%, 60%, 0.1) 0%, transparent 40%),
-    linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  background: #ffffff;
   z-index: -1;
   pointer-events: none;
 }
@@ -67,23 +62,31 @@ body::before {
   max-width: 480px;
   margin: 0 auto;
   min-height: 100vh;
-  background-color: hsla(0, 0%, 100%, 0.4);
-  backdrop-filter: blur(40px) saturate(150%);
-  -webkit-backdrop-filter: blur(40px) saturate(150%);
-  box-shadow: 0 0 80px rgba(0,0,0,0.03), inset 0 0 0 1px rgba(255,255,255,0.4);
+  background-color: #ffffff;
   position: relative;
   overflow-x: hidden;
 }
 
 .glass-card {
-  background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0.4) 100%);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.6);
-  box-shadow: 
-    0 4px 24px -1px rgba(0, 0, 0, 0.04),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.4);
-  border-radius: var(--radius);
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+  border-radius: 16px;
+}
+
+.thread-card {
+  background: #ffffff;
+  border-bottom: 1px solid #f3f4f6;
+  padding: 16px;
+  transition: background-color 0.2s;
+}
+
+.thread-card:hover {
+  background-color: #fafafa;
+}
+
+.thread-card:last-child {
+  border-bottom: none;
 }
 
 .glass-morphism {
