@@ -73,6 +73,7 @@ export const en: Dictionary = {
     normal: "Normal",
     bad: "Focus",
     today: "Today",
+    todayButton: "Today",
     month: "Month",
     day: "Day",
     weekdays: ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
