@@ -1,6 +1,7 @@
 import ruleTable from "../../rules/rule_table.json";
 import templates from "../../rules/templates.json";
-import { QuestionCategory, TodayFortuneResponse } from "../contracts/fortune";
+import { TodayFortuneResponse } from "../contracts/fortune";
+import { QuestionCategory } from "../contracts/question";
 import { seededRandom } from "../utils/random";
 import {
   LifeLogRequest,

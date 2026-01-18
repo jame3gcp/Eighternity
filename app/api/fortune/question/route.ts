@@ -109,7 +109,7 @@ export async function POST(request: Request) {
           pillars: pillars,
           fiveElements: fiveElements,
           dayMaster: dayMaster,
-          tenGods: tenGods.distribution,
+          tenGods: tenGods,
         };
         
         console.log("📋 전송될 사주 정보:", {
