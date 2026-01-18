@@ -343,8 +343,8 @@ export default function MyeongriPage() {
                 <div>
                   <h3 className="text-sm font-bold text-gray-900 mb-3 uppercase tracking-widest">십성 분포</h3>
                   <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
-                    {Object.entries(result.tenGods.distribution || {})
-                      .filter(([_, count]): count is number => typeof count === 'number' && count > 0)
+                    {(Object.entries(result.tenGods.distribution || {}) as [string, number][])
+                      .filter(([_, count]) => count > 0)
                       .sort(([_, a], [__, b]) => b - a)
                       .map(([name, count]) => (
                         <div key={name} className="p-3 bg-gradient-to-br from-indigo-50 to-purple-50 rounded-xl border border-indigo-100">
