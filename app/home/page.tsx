@@ -83,33 +83,36 @@ export default function HomePage() {
           <h1 className="text-3xl font-black text-slate-900 tracking-tighter">오늘의 나침반</h1>
           <p className="text-sm text-slate-500 font-bold mt-1 uppercase tracking-wide">Daily Compass Guide</p>
         </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2.5">
           <button
             onClick={() => setShowLifeLogForm(!showLifeLogForm)}
-            className={`px-4 py-2.5 rounded-2xl border-2 transition-all flex items-center gap-2 ${
+            className={`group relative px-5 py-2.5 rounded-2xl transition-all duration-300 flex items-center gap-2 overflow-hidden ${
               hasLifeLog
-                ? "border-primary/30 bg-primary/10 text-primary"
-                : "border-slate-300 bg-white text-slate-700 hover:border-primary/50"
-            }`}
+                ? "bg-gradient-to-br from-indigo-50 to-purple-50 border border-indigo-200/60 text-indigo-700 shadow-md shadow-indigo-500/10"
+                : "bg-white/80 backdrop-blur-sm border border-slate-200/60 text-slate-700 hover:border-indigo-300/60 hover:bg-gradient-to-br hover:from-indigo-50/50 hover:to-purple-50/50 hover:shadow-md hover:shadow-indigo-500/10"
+            } hover:scale-[1.02] active:scale-[0.98]`}
           >
-            {showLifeLogForm ? (
-              <>
-                <X size={16} />
-                <span className="text-xs font-black uppercase tracking-wide">닫기</span>
-              </>
-            ) : (
-              <>
-                <Edit3 size={16} />
-                <span className="text-xs font-black uppercase tracking-wide">
-                  {hasLifeLog ? "수정" : "입력"}
-                </span>
-              </>
-            )}
+            <span className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span className="relative z-10 flex items-center gap-2">
+              {showLifeLogForm ? (
+                <>
+                  <X size={16} className="transition-transform duration-300 group-hover:rotate-90" />
+                  <span className="text-xs font-black uppercase tracking-wide">닫기</span>
+                </>
+              ) : (
+                <>
+                  <Edit3 size={16} className="transition-transform duration-300 group-hover:scale-110" />
+                  <span className="text-xs font-black uppercase tracking-wide">
+                    {hasLifeLog ? "수정" : "입력"}
+                  </span>
+                </>
+              )}
+            </span>
           </button>
           <ShareButton 
             title="Eighternity - 오늘의 나침반" 
             text={data.hybridRecommendation.mainMessage} 
-            className="px-4 py-2.5 rounded-2xl"
+            className="px-5 py-2.5 rounded-2xl"
           />
         </div>
       </header>

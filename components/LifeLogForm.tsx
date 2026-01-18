@@ -219,27 +219,31 @@ export function LifeLogForm({ date, onSuccess, onCancel }: LifeLogFormProps) {
           <button
             type="button"
             onClick={onCancel}
-            className="flex-1 px-6 py-4 rounded-2xl border-2 border-slate-300 text-slate-700 font-black uppercase tracking-wide hover:bg-slate-50 transition-all"
+            className="group relative flex-1 px-6 py-4 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200/60 text-slate-700 font-black uppercase tracking-wide shadow-md shadow-slate-200/50 hover:shadow-lg hover:shadow-slate-300/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 overflow-hidden"
           >
-            취소
+            <span className="absolute inset-0 bg-gradient-to-br from-slate-50 to-slate-100/50 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span className="relative z-10">취소</span>
           </button>
         )}
         <button
           type="submit"
           disabled={isSubmitting || !mood || !condition || !sleep || !schedule}
-          className="flex-1 px-6 py-4 rounded-2xl bg-primary text-white font-black uppercase tracking-wide shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/30 disabled:opacity-50 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
+          className="group relative flex-1 px-6 py-4 rounded-2xl bg-gradient-to-br from-indigo-600 via-purple-600 to-rose-500 text-white font-black uppercase tracking-wide shadow-xl shadow-indigo-500/30 hover:shadow-2xl hover:shadow-indigo-500/40 hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 transition-all duration-300 flex items-center justify-center gap-2 overflow-hidden"
         >
-          {isSubmitting ? (
-            <>
-              <Loader2 className="animate-spin" size={20} />
-              저장 중...
-            </>
-          ) : (
-            <>
-              <CheckCircle size={20} />
-              저장하기
-            </>
-          )}
+          <span className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+          <span className="relative z-10 flex items-center gap-2">
+            {isSubmitting ? (
+              <>
+                <Loader2 className="animate-spin" size={20} />
+                <span>저장 중...</span>
+              </>
+            ) : (
+              <>
+                <CheckCircle size={20} className="transition-transform duration-300 group-hover:scale-110" />
+                <span>저장하기</span>
+              </>
+            )}
+          </span>
         </button>
       </div>
     </form>

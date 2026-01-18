@@ -41,12 +41,24 @@ export const ShareButton = ({ title, text, className }: ShareButtonProps) => {
     <button
       onClick={handleShare}
       className={cn(
-        "flex items-center gap-2 px-6 py-3 rounded-2xl bg-white/60 backdrop-blur-md border border-white/80 text-primary font-black text-sm uppercase tracking-[0.2em] shadow-xl shadow-indigo-100/20 hover:scale-[1.05] active:scale-[0.95] transition-all",
+        "group relative flex items-center gap-2 px-5 py-2.5 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200/60 text-indigo-700 font-black text-xs uppercase tracking-[0.15em] shadow-md shadow-slate-200/50 hover:shadow-xl hover:shadow-indigo-500/20 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300 overflow-hidden",
         className
       )}
     >
-      {copied ? <Check size={18} /> : <Share2 size={18} />}
-      {copied ? "Copied" : "Share"}
+      <span className="absolute inset-0 bg-gradient-to-br from-indigo-500/10 to-purple-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+      <span className="relative z-10 flex items-center gap-2">
+        {copied ? (
+          <>
+            <Check size={16} className="text-green-600 transition-transform duration-300 scale-110" />
+            <span>Copied</span>
+          </>
+        ) : (
+          <>
+            <Share2 size={16} className="transition-transform duration-300 group-hover:scale-110 group-hover:rotate-12" />
+            <span>Share</span>
+          </>
+        )}
+      </span>
     </button>
   );
 };

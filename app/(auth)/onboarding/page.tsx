@@ -108,16 +108,19 @@ export default function OnboardingPage() {
           <button
             type="submit"
             disabled={isLoading}
-            className="w-full p-6 bg-primary text-white rounded-[2rem] font-black text-xl shadow-2xl shadow-primary/40 active:scale-[0.98] hover:scale-[1.02] transition-all flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed group uppercase tracking-tighter"
+            className="group relative w-full p-6 bg-gradient-to-br from-indigo-600 via-purple-600 to-rose-500 text-white rounded-[2rem] font-black text-xl shadow-2xl shadow-indigo-500/40 active:scale-[0.98] hover:scale-[1.02] transition-all duration-300 flex items-center justify-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 overflow-hidden"
           >
-            {isLoading ? (
-              <span className="animate-pulse">Analyzing...</span>
-            ) : (
-              <>
-                시작하기
-                <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
-              </>
-            )}
+            <span className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <span className="relative z-10 flex items-center gap-3">
+              {isLoading ? (
+                <span className="animate-pulse">Analyzing...</span>
+              ) : (
+                <>
+                  <span>시작하기</span>
+                  <ArrowRight size={24} className="transition-transform duration-300 group-hover:translate-x-1" />
+                </>
+              )}
+            </span>
           </button>
           <p className="text-center text-xs text-slate-400 font-bold leading-relaxed px-4">
             “결정은 당신의 몫, 우리는 방향만 제안해요”<br />

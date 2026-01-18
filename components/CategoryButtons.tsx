@@ -16,13 +16,14 @@ export const CategoryButtons = ({ onSelect }: { onSelect: (id: QuestionCategory)
         <button
           key={cat.id}
           onClick={() => onSelect(cat.id)}
-          className="group flex flex-col items-center gap-2 animate-enter"
+          className="group relative flex flex-col items-center gap-2.5 animate-enter"
           style={{ animationDelay: `${i * 50}ms` }}
         >
-          <div className={`p-4 rounded-2xl shadow-sm border border-slate-100 transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-md group-active:scale-95 bg-white`}>
-            <cat.icon size={22} className={cat.color.split(" ")[0]} />
+          <div className="relative p-4.5 rounded-2xl bg-white/80 backdrop-blur-sm border border-slate-200/60 shadow-md shadow-slate-200/50 transition-all duration-300 group-hover:-translate-y-1.5 group-hover:shadow-xl group-hover:shadow-indigo-500/20 group-active:scale-95 group-active:translate-y-0 overflow-hidden">
+            <span className="absolute inset-0 bg-gradient-to-br from-white/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+            <cat.icon size={22} className={`relative z-10 ${cat.color.split(" ")[0]} transition-transform duration-300 group-hover:scale-110`} />
           </div>
-          <span className="text-[11px] font-semibold text-slate-500 group-hover:text-slate-800 transition-colors">
+          <span className="text-[11px] font-bold text-slate-600 group-hover:text-indigo-600 transition-colors duration-300 tracking-wide">
             {cat.label}
           </span>
         </button>
