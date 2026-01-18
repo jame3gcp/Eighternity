@@ -8,7 +8,11 @@ import { getSupabaseServerClient } from "@/lib/db/supabase";
 /**
  * birthDate를 기반으로 사용자 ID 조회 또는 생성
  */
-export async function getOrCreateUserId(birthDate: string, birthTime: string | null = null): Promise<string | null> {
+export async function getOrCreateUserId(
+  birthDate: string, 
+  birthTime: string | null = null,
+  gender: string | null = null
+): Promise<string | null> {
   const supabase = await getSupabaseServerClient();
   
   if (!supabase) {
@@ -41,6 +45,7 @@ export async function getOrCreateUserId(birthDate: string, birthTime: string | n
       .insert({
         birth_date: birthDate,
         birth_time: birthTime || null,
+        gender: gender || null,
       })
       .select("id")
       .single();

@@ -10,6 +10,7 @@ const nextConfig = {
         pg: false,
         'pg-native': false,
         '@supabase/supabase-js': false,
+        'openai': false,
       };
       
       // externals에 추가하여 번들에서 제외 (함수 형태로 처리)
@@ -22,7 +23,7 @@ const nextConfig = {
             : []),
         ({ request }, callback) => {
           // 선택적 의존성은 외부 모듈로 처리
-          if (request === 'pg' || request === 'pg-native' || request === '@supabase/supabase-js') {
+          if (request === 'pg' || request === 'pg-native' || request === '@supabase/supabase-js' || request === 'openai') {
             return callback(null, `commonjs ${request}`);
           }
           callback();

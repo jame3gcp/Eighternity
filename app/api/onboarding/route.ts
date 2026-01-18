@@ -12,7 +12,7 @@ export async function POST(request: Request) {
     const profile = getSajuProfile(validated.birthDate, validated.birthTime);
     
     // Supabase에 사용자 저장 (또는 조회)
-    const userId = await getOrCreateUserId(validated.birthDate, validated.birthTime);
+    const userId = await getOrCreateUserId(validated.birthDate, validated.birthTime, validated.gender);
     
     // 사주 차트 저장 (선택사항)
     const supabase = await getSupabaseServerClient();
@@ -38,6 +38,7 @@ export async function POST(request: Request) {
     response.cookies.set("user_saju", JSON.stringify({
       birthDate: validated.birthDate,
       birthTime: validated.birthTime,
+      gender: validated.gender,
       fiveElements: profile.fiveElements,
       userId: userId, // UUID 저장
     }), { path: "/", maxAge: 60 * 60 * 24 * 7 });

@@ -66,6 +66,88 @@ export default function ProfilePage() {
         <ElementBarChart elements={data.fiveElements} />
       </section>
 
+      {data.pillars && (
+        <section className="glass-card rounded-[2.5rem] p-8 bg-white border-white/50 shadow-2xl shadow-slate-200/50">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="font-black text-slate-900 flex items-center gap-3 text-xl tracking-tight">
+              <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+              사주 구성
+            </h2>
+            <Badge variant="default" className="px-3">Pillars</Badge>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="text-center p-4 bg-slate-50 rounded-2xl">
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">연주</div>
+              <div className="text-2xl font-black text-slate-900">{data.pillars.year}</div>
+            </div>
+            <div className="text-center p-4 bg-slate-50 rounded-2xl">
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">월주</div>
+              <div className="text-2xl font-black text-slate-900">{data.pillars.month}</div>
+            </div>
+            <div className="text-center p-4 bg-slate-50 rounded-2xl">
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">일주</div>
+              <div className="text-2xl font-black text-slate-900">{data.pillars.day}</div>
+            </div>
+            <div className="text-center p-4 bg-slate-50 rounded-2xl">
+              <div className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-2">시주</div>
+              <div className="text-2xl font-black text-slate-900">{data.pillars.hour === "未知" ? "미상" : data.pillars.hour}</div>
+            </div>
+          </div>
+        </section>
+      )}
+
+      {data.tenGods && (
+        <section className="glass-card rounded-[2.5rem] p-8 bg-white border-white/50 shadow-2xl shadow-slate-200/50">
+          <div className="flex items-center justify-between mb-8">
+            <h2 className="font-black text-slate-900 flex items-center gap-3 text-xl tracking-tight">
+              <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+              십성(十神) 분포
+            </h2>
+            <Badge variant="default" className="px-3">Ten Gods</Badge>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-5 gap-3">
+            {Object.entries(data.tenGods)
+              .filter(([_, count]) => count > 0)
+              .sort(([_, a], [__, b]) => b - a)
+              .map(([name, count]) => (
+                <div
+                  key={name}
+                  className="p-4 bg-gradient-to-br from-slate-50 to-slate-100 rounded-2xl border border-slate-200 hover:shadow-md transition-all"
+                >
+                  <div className="text-center">
+                    <div className="text-lg font-black text-slate-900 mb-1">{name}</div>
+                    <div className="text-2xl font-black text-primary">{count}</div>
+                  </div>
+                </div>
+              ))}
+          </div>
+          {Object.values(data.tenGods).every((count) => count === 0) && (
+            <div className="text-center py-8 text-slate-400">십성 정보가 없습니다</div>
+          )}
+        </section>
+      )}
+
+      {/* 명리학 분석 섹션 */}
+      <section className="glass-card rounded-[2.5rem] p-8 bg-gradient-to-br from-indigo-50 to-purple-50 border-indigo-200/50 shadow-2xl shadow-indigo-200/50">
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="font-black text-slate-900 flex items-center gap-3 text-xl tracking-tight">
+            <span className="w-1.5 h-6 bg-indigo-500 rounded-full"></span>
+            명리학 종합 분석
+          </h2>
+          <Badge variant="default" className="px-3 bg-indigo-500">AI Analysis</Badge>
+        </div>
+        <p className="text-sm text-gray-600 mb-6 leading-relaxed">
+          사주, 오행, 십성, 형충회합, 대운·세운을 종합적으로 분석하여<br />
+          성격, 직업, 재물, 건강, 인연에 대한 깊이 있는 해석을 제공합니다.
+        </p>
+        <a
+          href="/myeongri"
+          className="block w-full px-6 py-4 bg-indigo-600 text-white rounded-xl font-bold text-center hover:bg-indigo-700 active:scale-[0.98] transition-all duration-200 shadow-lg shadow-indigo-500/30"
+        >
+          명리학 분석 보기
+        </a>
+      </section>
+
       <section className="space-y-6">
         <div className="flex items-center justify-between px-1">
           <h2 className="font-black text-slate-900 flex items-center gap-3 text-xl tracking-tight">

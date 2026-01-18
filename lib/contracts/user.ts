@@ -3,7 +3,7 @@ import { z } from "zod";
 export const OnboardingRequestSchema = z.object({
   birthDate: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, "YYYY-MM-DD 형식이 아닙니다."),
   birthTime: z.string().nullable(),
-  gender: z.enum(["M", "F", "O"]).optional(),
+  gender: z.enum(["M", "F", "O"]), // 필수로 변경
 });
 
 export type OnboardingRequest = z.infer<typeof OnboardingRequestSchema>;
@@ -30,14 +30,20 @@ export type SajuPillars = z.infer<typeof SajuPillarsSchema>;
 export const UserSajuCookieSchema = z.object({
   birthDate: z.string(),
   birthTime: z.string().nullable(),
+  gender: z.enum(["M", "F", "O"]).optional(),
   fiveElements: FiveElementsSchema,
+  userId: z.string().optional(),
 });
 
 export type UserSajuCookie = z.infer<typeof UserSajuCookieSchema>;
 
+export const TenGodsSchema = z.record(z.string(), z.number());
+
 export const ProfileResponseSchema = z.object({
   fiveElements: FiveElementsSchema,
   pillars: SajuPillarsSchema,
+  dayMaster: z.string().optional(),
+  tenGods: TenGodsSchema.optional(),
   strengths: z.array(z.string()),
   cautions: z.array(z.string()),
 });

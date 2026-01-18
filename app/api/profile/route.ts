@@ -1,5 +1,7 @@
 import { cookies } from "next/headers";
 import { NextResponse } from "next/server";
+import { getSajuProfile } from "@/lib/engine/sajuEngine";
+import { analyzeTenGods } from "@/lib/engine/tenGods";
 
 export async function GET() {
   try {
@@ -16,9 +18,9 @@ export async function GET() {
     }
 
     const userData = JSON.parse(userSaju.value);
-    const { fiveElements } = userData;
+    const { birthDate, birthTime, fiveElements } = userData;
     
-    if (!fiveElements) {
+    if (!fiveElements || !birthDate) {
       return NextResponse.json({ 
         fiveElements: { wood: 20, fire: 20, earth: 20, metal: 20, water: 20 },
         strengths: ["온보딩이 필요합니다"],
@@ -27,8 +29,17 @@ export async function GET() {
       });
     }
     
+    // 사주 프로필 재계산
+    const sajuProfile = getSajuProfile(birthDate, birthTime);
+    
+    // 십성 분석
+    const tenGods = analyzeTenGods(sajuProfile.dayMaster, sajuProfile.pillars);
+    
     return NextResponse.json({
       fiveElements,
+      pillars: sajuProfile.pillars,
+      dayMaster: sajuProfile.dayMaster,
+      tenGods,
       strengths: ["끈기가 강함", "창의적인 사고", "타인을 배려하는 마음"],
       cautions: ["고집이 셀 수 있음", "결정 장애", "체력 관리 유의"],
     });

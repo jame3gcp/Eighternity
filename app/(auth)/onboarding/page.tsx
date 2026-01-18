@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { OnboardingRequest } from "../../../lib/contracts/user";
-import { ArrowRight, Clock, Calendar, Info } from "lucide-react";
+import { ArrowRight, Clock, Calendar, Users } from "lucide-react";
 
 import { Chip } from "../../../components/Chip";
 import { Sparkles } from "lucide-react";
@@ -98,6 +98,39 @@ export default function OnboardingPage() {
                   시간 선택
                 </Chip>
               </div>
+            </div>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-gray-900 flex items-center gap-2">
+              <Users size={16} />
+              성별
+            </label>
+            <div className="flex gap-2">
+              <Chip 
+                type="button"
+                active={formData.gender === "M"}
+                onClick={() => setFormData({ ...formData, gender: "M" })}
+                className="flex-1 py-3 rounded-xl"
+              >
+                남성
+              </Chip>
+              <Chip 
+                type="button"
+                active={formData.gender === "F"}
+                onClick={() => setFormData({ ...formData, gender: "F" })}
+                className="flex-1 py-3 rounded-xl"
+              >
+                여성
+              </Chip>
+              <Chip 
+                type="button"
+                active={formData.gender === "O"}
+                onClick={() => setFormData({ ...formData, gender: "O" })}
+                className="flex-1 py-3 rounded-xl"
+              >
+                기타
+              </Chip>
             </div>
           </div>
         </div>
