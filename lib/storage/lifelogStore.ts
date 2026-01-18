@@ -234,7 +234,16 @@ export const lifelogStore = {
           .order("date", { ascending: false });
 
         if (!error && data) {
-          return data.map((item) => ({
+          return data.map((item: {
+            id: string;
+            date: string;
+            mood: string;
+            condition: string;
+            sleep: string;
+            schedule: string;
+            notes: string | null;
+            created_at: string;
+          }) => ({
             id: item.id,
             date: item.date,
             mood: item.mood,
