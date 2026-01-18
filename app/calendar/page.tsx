@@ -30,7 +30,7 @@ export default function CalendarPage() {
         <Skeleton className="h-10 w-16 rounded-2xl" />
       </div>
       <div className="space-y-3">
-        {[1,2,3,4,5].map(i => <Skeleton key={i} className="h-20 w-full rounded-2xl" />)}
+        {[1,2,3,4,5].map((i: number) => <Skeleton key={i} className="h-20 w-full rounded-2xl" />)}
       </div>
     </div>
   );

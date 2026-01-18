@@ -18,7 +18,7 @@ export const supabaseLifelogStore = {
    * 라이프 로그 조회
    */
   async get(userId: string, date: string): Promise<LifeLogResponse | undefined> {
-    const supabase = getSupabaseServerClient();
+    const supabase = await getSupabaseServerClient();
     
     if (!supabase) {
       // Supabase가 없으면 메모리 저장소 사용
@@ -55,7 +55,7 @@ export const supabaseLifelogStore = {
    * 라이프 로그 저장
    */
   async set(userId: string, value: LifeLogRequest): Promise<LifeLogResponse> {
-    const supabase = getSupabaseServerClient();
+    const supabase = await getSupabaseServerClient();
     
     const response: LifeLogResponse = {
       ...value,
@@ -112,7 +112,7 @@ export const supabaseLifelogStore = {
    * 라이프 로그 삭제
    */
   async delete(userId: string, date: string): Promise<boolean> {
-    const supabase = getSupabaseServerClient();
+    const supabase = await getSupabaseServerClient();
     
     if (!supabase) {
       const key = getKey(userId, date);
@@ -139,7 +139,7 @@ export const supabaseLifelogStore = {
    * 모든 라이프 로그 조회 (특정 사용자)
    */
   async getAll(userId: string): Promise<LifeLogResponse[]> {
-    const supabase = getSupabaseServerClient();
+    const supabase = await getSupabaseServerClient();
     
     if (!supabase) {
       return Array.from(memoryStore.values()).filter(

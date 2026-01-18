@@ -106,7 +106,7 @@ export const ruleEngine = {
   },
 
   calendar: (fiveElements: any, days: number = 30) => {
-    return Array.from({ length: days }).map((_, i) => {
+    return Array.from({ length: days }).map((_: unknown, i: number) => {
       const date = new Date();
       date.setDate(date.getDate() + i);
       const dateStr = date.toISOString().split("T")[0];
