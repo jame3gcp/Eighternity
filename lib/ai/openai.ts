@@ -470,6 +470,8 @@ export async function analyzeMyeongri(
  */
 import { EmotionAnalysisRequest, EmotionAnalysisResponse } from "@/lib/contracts/emotion";
 import { LifeLogRequest } from "@/lib/contracts/lifelog";
+import { QuestionCategory, QuestionAnswer } from "@/lib/contracts/question";
+import { FiveElements, SajuPillars } from "@/lib/contracts/user";
 
 /**
  * OpenAI를 사용한 감정 분석
@@ -531,6 +533,116 @@ export async function analyzeEmotion(
     return parsed;
   } catch (error: any) {
     console.error("❌ OpenAI API 오류 (감정 분석):", error.message);
+    if (error.status === 401) {
+      console.error("💡 API 키가 유효하지 않습니다. OPENAI_API_KEY를 확인하세요.");
+    } else if (error.status === 429) {
+      console.error("💡 Rate limit 초과. 잠시 후 다시 시도하세요.");
+    }
+    return null;
+  }
+}
+
+/**
+ * 질문 답변 인터페이스
+ */
+export interface QuestionAnalysisRequest {
+  category?: QuestionCategory;
+  question?: string;
+  sajuInfo?: {
+    pillars?: SajuPillars;
+    fiveElements?: FiveElements;
+    dayMaster?: string;
+    tenGods?: Record<string, number>;
+  };
+}
+
+/**
+ * OpenAI를 사용한 질문 답변
+ */
+export async function analyzeQuestion(
+  request: QuestionAnalysisRequest
+): Promise<QuestionAnswer | null> {
+  const client = await getOpenAIClient();
+  
+  if (!client) {
+    console.warn("OpenAI client not available - check OPENAI_API_KEY and openai package");
+    return null;
+  }
+
+  console.log("✅ OpenAI client initialized, starting question analysis...");
+  console.log("📋 질문 요청:", {
+    category: request.category,
+    question: request.question,
+    hasSajuInfo: !!request.sajuInfo,
+  });
+
+  // 프롬프트 생성
+  const { getQuestionSystemPrompt, createQuestionPrompt } = await import("./prompts/question");
+  const systemPrompt = getQuestionSystemPrompt();
+  const userPrompt = createQuestionPrompt(
+    request.category || "love",
+    request.question,
+    request.sajuInfo
+  );
+
+  try {
+    console.log("📤 OpenAI API 요청 전송 중 (질문 답변)...");
+    const completion = await client.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        { role: "system", content: systemPrompt },
+        { role: "user", content: userPrompt },
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.7,
+      max_tokens: 2000,
+    });
+
+    const content = completion.choices[0]?.message?.content;
+    if (!content) {
+      console.warn("⚠️ OpenAI 응답이 비어있습니다");
+      return null;
+    }
+
+    console.log("📥 OpenAI 응답 수신 완료 (질문 답변)");
+    
+    // JSON 파싱 시도
+    let parsed: QuestionAnswer;
+    try {
+      parsed = JSON.parse(content) as QuestionAnswer;
+      console.log("✅ JSON 파싱 완료");
+    } catch (parseError: any) {
+      console.error("❌ JSON 파싱 오류:", parseError.message);
+      
+      // 마크다운 코드 블록 제거 시도
+      try {
+        let fixedContent = content.trim();
+        if (fixedContent.startsWith("```json")) {
+          fixedContent = fixedContent.replace(/^```json\s*/i, "").replace(/\s*```$/i, "");
+        } else if (fixedContent.startsWith("```")) {
+          fixedContent = fixedContent.replace(/^```\s*/, "").replace(/\s*```$/, "");
+        }
+        parsed = JSON.parse(fixedContent) as QuestionAnswer;
+        console.log("✅ JSON 수정 후 파싱 성공");
+      } catch (fixError: any) {
+        console.error("❌ JSON 수정도 실패:", fixError.message);
+        return null;
+      }
+    }
+    
+    // 카테고리 설정
+    if (!parsed.category && request.category) {
+      parsed.category = request.category;
+    }
+    
+    console.log("📊 답변 결과 요약:");
+    console.log("  - 요약:", parsed.summary);
+    console.log("  - 카테고리:", parsed.category);
+    console.log("  - 신뢰도:", parsed.confidence);
+    
+    return parsed;
+  } catch (error: any) {
+    console.error("❌ OpenAI API 오류 (질문 답변):", error.message);
     if (error.status === 401) {
       console.error("💡 API 키가 유효하지 않습니다. OPENAI_API_KEY를 확인하세요.");
     } else if (error.status === 429) {

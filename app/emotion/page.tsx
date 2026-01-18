@@ -13,8 +13,10 @@ import { EmotionPatternCard } from "@/components/EmotionPatternCard";
 import { Skeleton } from "@/components/Skeleton";
 import { Badge } from "@/components/Badge";
 import { Sparkles, TrendingUp, MessageCircle, Lightbulb, Target } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function EmotionPage() {
+  const { t, language } = useLanguage();
   const [data, setData] = useState<EmotionAnalysisResponse | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -43,14 +45,14 @@ export default function EmotionPage() {
 
       if (!res.ok) {
         const errorData = await res.json();
-        throw new Error(errorData.error || "감정 분석 실패");
+        throw new Error(errorData.error || t.emotion.analysisFailed);
       }
 
       const analysisData = await res.json();
       setData(analysisData);
     } catch (err: any) {
       console.error("Emotion analysis error:", err);
-      setError(err.message || "감정 분석 중 오류가 발생했습니다.");
+      setError(err.message || t.emotion.errorMessage);
     } finally {
       setLoading(false);
     }
@@ -79,14 +81,14 @@ export default function EmotionPage() {
           <Sparkles size={32} className="text-red-400" />
         </div>
         <div className="text-center space-y-2">
-          <h2 className="text-xl font-bold text-gray-900">오류 발생</h2>
+          <h2 className="text-xl font-bold text-gray-900">{t.emotion.error}</h2>
           <p className="text-gray-500">{error}</p>
         </div>
         <button
           onClick={fetchEmotionAnalysis}
           className="px-6 py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-all"
         >
-          다시 시도
+          {t.emotion.retry}
         </button>
       </div>
     );
@@ -99,8 +101,8 @@ export default function EmotionPage() {
           <Sparkles size={32} className="text-gray-400" />
         </div>
         <div className="text-center space-y-2">
-          <h2 className="text-xl font-bold text-gray-900">데이터 없음</h2>
-          <p className="text-gray-500">감정 분석 데이터가 없습니다.</p>
+          <h2 className="text-xl font-bold text-gray-900">{t.emotion.noData}</h2>
+          <p className="text-gray-500">{t.emotion.noDataMessage}</p>
         </div>
       </div>
     );
@@ -115,8 +117,10 @@ export default function EmotionPage() {
           </div>
         </div>
         <div>
-          <h1 className="text-3xl font-black text-slate-900 tracking-tighter">감정 분석 리포트</h1>
-          <p className="text-sm text-slate-500 font-bold mt-1 uppercase tracking-wide">Emotion Analysis Report</p>
+          <h1 className="text-3xl font-black text-slate-900 tracking-tighter">{t.emotion.title}</h1>
+          {language === "ko" && (
+            <p className="text-sm text-slate-500 font-bold mt-1 uppercase tracking-wide">{t.emotion.subtitle}</p>
+          )}
         </div>
       </header>
 
@@ -125,9 +129,11 @@ export default function EmotionPage() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-black text-slate-900 flex items-center gap-3 text-xl tracking-tight">
             <MessageCircle size={24} className="text-pink-500" />
-            AI 코멘트
+            {t.emotion.aiComment}
           </h2>
-          <Badge variant="default" className="px-3">AI Analysis</Badge>
+          {language === "ko" && (
+            <Badge variant="default" className="px-3">{t.emotion.aiAnalysis}</Badge>
+          )}
         </div>
         <p className="text-base leading-relaxed text-gray-700">{data.aiComment}</p>
       </section>
@@ -137,11 +143,13 @@ export default function EmotionPage() {
         <div className="flex items-center justify-between mb-8">
           <h2 className="font-black text-slate-900 flex items-center gap-3 text-xl tracking-tight">
             <Target size={24} className="text-indigo-500" />
-            감정 행동 유형
+            {t.emotion.patternType}
           </h2>
-          <Badge variant="default" className="px-3">Pattern</Badge>
+          {language === "ko" && (
+            <Badge variant="default" className="px-3">{t.emotion.pattern}</Badge>
+          )}
         </div>
-        <EmotionPatternCard patternType={data.patternType} confidence={data.patternConfidence} />
+        <EmotionPatternCard patternType={data.patternType} confidence={data.patternConfidence} language={language} />
       </section>
 
       {/* 감정 파형 그래프 */}
@@ -149,11 +157,13 @@ export default function EmotionPage() {
         <div className="flex items-center justify-between mb-8">
           <h2 className="font-black text-slate-900 flex items-center gap-3 text-xl tracking-tight">
             <TrendingUp size={24} className="text-blue-500" />
-            감정 파형
+            {t.emotion.emotionWave}
           </h2>
-          <Badge variant="default" className="px-3">Wave Graph</Badge>
+          {language === "ko" && (
+            <Badge variant="default" className="px-3">{t.emotion.waveGraph}</Badge>
+          )}
         </div>
-        <EmotionWaveGraph points={data.emotionWave.points} height={300} />
+        <EmotionWaveGraph points={data.emotionWave.points} height={300} language={language} />
         {data.emotionWave.summary && (
           <div className="mt-6 pt-6 border-t border-gray-100">
             <p className="text-sm text-gray-600 leading-relaxed">{data.emotionWave.summary}</p>
@@ -167,11 +177,13 @@ export default function EmotionPage() {
           <div className="flex items-center justify-between mb-8">
             <h2 className="font-black text-slate-900 flex items-center gap-3 text-xl tracking-tight">
               <Lightbulb size={24} className="text-amber-500" />
-              행동 상관 분석
+              {t.emotion.behaviorCorrelation}
             </h2>
-            <Badge variant="default" className="px-3">Correlation</Badge>
+            {language === "ko" && (
+              <Badge variant="default" className="px-3">{t.emotion.correlation}</Badge>
+            )}
           </div>
-          <BehaviorHeatmap correlations={data.behaviorCorrelations} />
+          <BehaviorHeatmap correlations={data.behaviorCorrelations} language={language} />
         </section>
       )}
 
@@ -180,20 +192,22 @@ export default function EmotionPage() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-black text-slate-900 flex items-center gap-3 text-xl tracking-tight">
             <TrendingUp size={24} className="text-purple-500" />
-            미래 리듬 예측
+            {t.emotion.futureRhythm}
           </h2>
-          <Badge variant="default" className="px-3">Prediction</Badge>
+          {language === "ko" && (
+            <Badge variant="default" className="px-3">{t.emotion.prediction}</Badge>
+          )}
         </div>
         <div className="space-y-4">
           <div>
             <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">
-              다음 단계
+              {t.emotion.nextPhase}
             </h3>
             <p className="text-lg font-bold text-gray-900">{data.futureRhythm.nextPhase}</p>
           </div>
           <div>
             <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">
-              예상 감정
+              {t.emotion.predictedEmotions}
             </h3>
             <div className="flex flex-wrap gap-2">
               {data.futureRhythm.predictedEmotions.map((pred, idx) => (
@@ -205,7 +219,7 @@ export default function EmotionPage() {
           </div>
           <div>
             <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-2">
-              추천 사항
+              {t.emotion.recommendation}
             </h3>
             <p className="text-base text-gray-700 leading-relaxed">{data.futureRhythm.recommendation}</p>
           </div>
@@ -217,14 +231,16 @@ export default function EmotionPage() {
         <div className="flex items-center justify-between mb-6">
           <h2 className="font-black text-slate-900 flex items-center gap-3 text-xl tracking-tight">
             <Lightbulb size={24} className="text-green-500" />
-            조언 피드백
+            {t.emotion.feedback}
           </h2>
-          <Badge variant="default" className="px-3">Feedback</Badge>
+          {language === "ko" && (
+            <Badge variant="default" className="px-3">{t.emotion.feedbackLabel}</Badge>
+          )}
         </div>
         <div className="space-y-6">
           <div>
             <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-3">
-              인사이트
+              {t.emotion.insights}
             </h3>
             <ul className="space-y-2">
               {data.feedback.insights.map((insight, idx) => (
@@ -237,7 +253,7 @@ export default function EmotionPage() {
           </div>
           <div>
             <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-3">
-              제안
+              {t.emotion.suggestions}
             </h3>
             <ul className="space-y-2">
               {data.feedback.suggestions.map((suggestion, idx) => (
@@ -250,7 +266,7 @@ export default function EmotionPage() {
           </div>
           <div>
             <h3 className="text-sm font-bold text-gray-500 uppercase tracking-widest mb-3">
-              성장 방향
+              {t.emotion.growthDirection}
             </h3>
             <p className="text-base text-gray-700 leading-relaxed">{data.feedback.growthDirection}</p>
           </div>

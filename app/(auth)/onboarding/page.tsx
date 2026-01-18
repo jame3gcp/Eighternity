@@ -22,15 +22,30 @@ export default function OnboardingPage() {
     setIsLoading(true);
     
     try {
+      // birthTime이 빈 문자열이면 null로 변환
+      const submitData = {
+        ...formData,
+        birthTime: formData.birthTime === "" ? null : formData.birthTime,
+      };
+      
       const res = await fetch("/api/onboarding", {
         method: "POST",
-        body: JSON.stringify(formData),
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(submitData),
       });
+      
       if (res.ok) {
         router.push("/home");
+      } else {
+        const errorData = await res.json();
+        console.error("Onboarding error:", errorData);
+        alert(`오류: ${errorData.error || "알 수 없는 오류가 발생했습니다."}`);
       }
     } catch (error) {
-      console.error(error);
+      console.error("Onboarding error:", error);
+      alert("요청 중 오류가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
@@ -92,7 +107,10 @@ export default function OnboardingPage() {
                 <Chip 
                   type="button"
                   active={formData.birthTime !== null}
-                  onClick={() => setFormData({ ...formData, birthTime: "12:00" })}
+                  onClick={() => {
+                    // 시간 선택 버튼 클릭 시, 이미 시간이 있으면 유지, 없으면 기본값 설정
+                    setFormData({ ...formData, birthTime: formData.birthTime || "12:00" });
+                  }}
                   className="flex-grow py-3 rounded-xl"
                 >
                   시간 선택

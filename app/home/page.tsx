@@ -6,20 +6,24 @@ import { MetricCard } from "../../components/MetricCard";
 import { DoDontCard } from "../../components/DoDontCard";
 import { LifeLogForm } from "../../components/LifeLogForm";
 import { HybridRecommendationResponse } from "../../lib/contracts/lifelog";
-import { Briefcase, Heart, Coins, Activity, Info, Sparkles, CheckCircle, Edit3, X, MoreHorizontal, Share2 } from "lucide-react";
+import { Briefcase, Heart, Coins, Activity, Info, Sparkles, CheckCircle, Edit3, X, Share2, Check } from "lucide-react";
 
 import { Skeleton } from "../../components/Skeleton";
 import { ShareButton } from "../../components/ShareButton";
+import { useLanguage } from "../../lib/i18n/LanguageContext";
+import { cn } from "../../lib/utils";
 
 export default function HomePage() {
+  const { t, language } = useLanguage();
   const [data, setData] = useState<HybridRecommendationResponse | null>(null);
   const [error, setError] = useState<boolean>(false);
   const [showLifeLogForm, setShowLifeLogForm] = useState(false);
   const [hasLifeLog, setHasLifeLog] = useState(false);
+  const [shareCopied, setShareCopied] = useState(false);
 
   const fetchHybridFortune = async () => {
     try {
-      const res = await fetch("/api/fortune/hybrid?includeLifeLog=true");
+      const res = await fetch(`/api/fortune/hybrid?includeLifeLog=true&lang=${language}`);
       if (res.status === 401) {
         window.location.href = "/onboarding";
         return;
@@ -35,12 +39,48 @@ export default function HomePage() {
 
   useEffect(() => {
     fetchHybridFortune();
-  }, []);
+  }, [language]);
 
   const handleLifeLogSuccess = () => {
     setShowLifeLogForm(false);
     fetchHybridFortune();
   };
+
+  // 공유 기능
+  const handleShare = async () => {
+    if (!data) return;
+
+    const shareText = language === "ko" 
+      ? `오늘의 나침반\n${data.hybridRecommendation.mainMessage}\n\n도메인 에너지:\n직업운: ${data.adjustedScores.work}점\n애정운: ${data.adjustedScores.love}점\n재물운: ${data.adjustedScores.money}점\n건강운: ${data.adjustedScores.health}점`
+      : `Today's Compass\n${data.hybridRecommendation.mainMessage}\n\nDomain Energy:\nCareer: ${data.adjustedScores.work}pts\nLove: ${data.adjustedScores.love}pts\nWealth: ${data.adjustedScores.money}pts\nHealth: ${data.adjustedScores.health}pts`;
+
+    const shareData = {
+      title: language === "ko" ? "오늘의 나침반" : "Today's Compass",
+      text: shareText,
+      url: window.location.origin,
+    };
+
+    if (navigator.share) {
+      try {
+        await navigator.share(shareData);
+      } catch (err) {
+        // 사용자가 공유를 취소한 경우는 에러로 처리하지 않음
+        if ((err as Error).name !== "AbortError") {
+          console.error("Error sharing:", err);
+        }
+      }
+    } else {
+      // Web Share API를 지원하지 않는 경우 클립보드에 복사
+      try {
+        await navigator.clipboard.writeText(`${shareData.title}\n\n${shareData.text}\n\n${shareData.url}`);
+        setShareCopied(true);
+        setTimeout(() => setShareCopied(false), 2000);
+      } catch (err) {
+        console.error("Error copying to clipboard:", err);
+      }
+    }
+  };
+
 
   if (error) return (
     <div className="flex flex-col items-center justify-center min-h-[60vh] gap-6 px-4">
@@ -48,14 +88,14 @@ export default function HomePage() {
         <Activity size={32} className="text-gray-400" />
       </div>
       <div className="text-center space-y-2">
-        <h3 className="text-lg font-semibold text-gray-900">연결이 고르지 않아요</h3>
-        <p className="text-sm text-gray-500">잠시 후 다시 시도해주세요</p>
+        <h3 className="text-lg font-semibold text-gray-900">{t.common.connectionError}</h3>
+        <p className="text-sm text-gray-500">{t.common.connectionRetry}</p>
       </div>
       <button 
         onClick={() => window.location.reload()}
         className="px-6 py-3 bg-gray-900 text-white rounded-full font-medium text-sm hover:bg-gray-800 transition-colors"
       >
-        다시 시도
+        {t.common.retry}
       </button>
     </div>
   );
@@ -88,8 +128,8 @@ export default function HomePage() {
               <Edit3 size={18} className="text-gray-600" />
             </div>
             <div className="flex-1">
-              <h3 className="text-sm font-semibold text-gray-900">오늘의 상태 기록</h3>
-              <p className="text-xs text-gray-500">더 정확한 추천을 위해 입력해주세요</p>
+              <h3 className="text-sm font-semibold text-gray-900">{t.home.stateRecord}</h3>
+              <p className="text-xs text-gray-500">{t.home.accurateRecommendation}</p>
             </div>
             <button
               onClick={() => setShowLifeLogForm(false)}
@@ -110,9 +150,9 @@ export default function HomePage() {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-1">
-              <span className="text-sm font-semibold text-gray-900">오늘의 나침반</span>
+              <span className="text-sm font-semibold text-gray-900">{t.home.title}</span>
               <span className="text-xs text-gray-500">·</span>
-              <span className="text-xs text-gray-500">지금</span>
+              <span className="text-xs text-gray-500">{t.common.now}</span>
             </div>
             <p className="text-sm text-gray-500 mb-3">{data.hybridRecommendation.mainMessage}</p>
             
@@ -125,48 +165,57 @@ export default function HomePage() {
                 </span>
               </div>
               {data.lifeLogAnalysis.hasData && (
-                <span className="text-xs text-indigo-600 font-medium">하이브리드 추천</span>
+                <span className="text-xs text-indigo-600 font-medium">{t.home.hybridRecommendation}</span>
               )}
             </div>
 
             {/* 액션 버튼 */}
             <div className="flex items-center gap-4 pt-2 border-t border-gray-100">
-              <button className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors">
-                <Share2 size={18} />
-                <span className="text-xs font-medium">공유</span>
+              <button 
+                onClick={handleShare}
+                className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
+              >
+                {shareCopied ? (
+                  <>
+                    <Check size={18} className="text-green-600" />
+                    <span className="text-xs font-medium text-green-600">{t.share.copied}</span>
+                  </>
+                ) : (
+                  <>
+                    <Share2 size={18} />
+                    <span className="text-xs font-medium">{t.common.share}</span>
+                  </>
+                )}
               </button>
               <button 
                 onClick={() => setShowLifeLogForm(!showLifeLogForm)}
                 className="flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
               >
                 <Edit3 size={18} />
-                <span className="text-xs font-medium">{hasLifeLog ? "수정" : "입력"}</span>
+                <span className="text-xs font-medium">{hasLifeLog ? t.common.edit : t.common.input}</span>
               </button>
             </div>
           </div>
-          <button className="w-8 h-8 rounded-full hover:bg-gray-100 flex items-center justify-center transition-colors flex-shrink-0">
-            <MoreHorizontal size={18} className="text-gray-500" />
-          </button>
         </div>
       </div>
 
       {/* 도메인 점수 카드 */}
       <div className="thread-card">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-gray-900">도메인 에너지</h3>
+          <h3 className="text-sm font-semibold text-gray-900">{t.home.domainEnergy}</h3>
         </div>
         <div className="grid grid-cols-2 gap-3">
-          <MetricCard title="직업운" score={data.adjustedScores.work} icon={Briefcase} />
-          <MetricCard title="애정운" score={data.adjustedScores.love} icon={Heart} />
-          <MetricCard title="재물운" score={data.adjustedScores.money} icon={Coins} />
-          <MetricCard title="건강운" score={data.adjustedScores.health} icon={Activity} />
+          <MetricCard title={t.home.work} score={data.adjustedScores.work} icon={Briefcase} />
+          <MetricCard title={t.home.love} score={data.adjustedScores.love} icon={Heart} />
+          <MetricCard title={t.home.money} score={data.adjustedScores.money} icon={Coins} />
+          <MetricCard title={t.home.health} score={data.adjustedScores.health} icon={Activity} />
         </div>
       </div>
 
       {/* 추천 가이드 카드 */}
       <div className="thread-card">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-sm font-semibold text-gray-900">오늘의 가이드</h3>
+          <h3 className="text-sm font-semibold text-gray-900">{t.home.todayGuide}</h3>
         </div>
         <DoDontCard recommend={data.hybridRecommendation.recommend} avoid={data.hybridRecommendation.avoid} />
         
@@ -175,7 +224,7 @@ export default function HomePage() {
             <div className="flex items-start gap-2">
               <Info size={16} className="text-gray-400 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-xs font-medium text-gray-500 mb-1">추천 이유</p>
+                <p className="text-xs font-medium text-gray-500 mb-1">{t.home.recommendReason}</p>
                 <p className="text-sm text-gray-700 leading-relaxed">{data.hybridRecommendation.reasoning}</p>
               </div>
             </div>
@@ -190,12 +239,20 @@ export default function HomePage() {
             <CheckCircle size={18} className="text-indigo-600" />
           </div>
           <div>
-            <h3 className="text-sm font-semibold text-gray-900">오늘의 작은 루틴</h3>
-            <p className="text-xs text-gray-500">5분 루틴</p>
+            <h3 className="text-sm font-semibold text-gray-900">{t.home.todayRoutine}</h3>
+            <p className="text-xs text-gray-500">{t.home.fiveMinRoutine}</p>
           </div>
         </div>
         <p className="text-sm text-gray-700 leading-relaxed">
-          내면의 {data.adjustedScores.work > 60 ? "활기를 유지하기 위해" : "균형을 찾기 위해"} 오늘은 <span className="font-semibold text-gray-900">점심 식사 후 5분간 가벼운 스트레칭</span>을 해보세요.
+          {language === "ko" ? (
+            <>
+              내면의 {data.adjustedScores.work > 60 ? t.home.vitalityMaintain : t.home.vitalityBalance} 오늘은 <span className="font-semibold text-gray-900">{t.home.routineStretch}</span>을 해보세요.
+            </>
+          ) : (
+            <>
+              To {data.adjustedScores.work > 60 ? t.home.vitalityMaintain : t.home.vitalityBalance} your inner self, today try <span className="font-semibold text-gray-900">{t.home.routineStretch}</span>.
+            </>
+          )}
         </p>
       </div>
     </div>

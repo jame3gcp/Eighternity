@@ -9,6 +9,8 @@ import { getSajuProfile } from "@/lib/engine/sajuEngine";
 import { analyzeTenGods } from "@/lib/engine/tenGods";
 import { calculateDaeun, calculateSeun, calculateRelationships } from "@/lib/engine/luck";
 import { analyzeMyeongri, MyeongriAnalysisRequest } from "@/lib/ai/openai";
+import { getMyeongriAnalysis, saveMyeongriAnalysis } from "@/lib/storage/myeongriStore";
+import { getOrCreateUserId } from "@/lib/storage/userStore";
 
 // 동적 라우트로 명시 (cookies 사용)
 export const dynamic = 'force-dynamic';
@@ -23,12 +25,28 @@ export async function POST(request: Request) {
     }
 
     const userData = JSON.parse(userSaju.value);
-    const { birthDate, birthTime, gender } = userData;
+    const { birthDate, birthTime, gender, userId } = userData;
 
     if (!birthDate) {
       return NextResponse.json({ error: "Birth date required" }, { status: 400 });
     }
 
+    // 사용자 ID 확인 또는 생성
+    const actualUserId = userId || await getOrCreateUserId(birthDate, birthTime || null, gender || "O");
+    if (!actualUserId) {
+      return NextResponse.json({ error: "Failed to get user ID" }, { status: 500 });
+    }
+
+    // 저장된 분석 결과 조회 시도
+    console.log("🔍 저장된 명리학 분석 결과 조회 중...");
+    const cachedAnalysis = await getMyeongriAnalysis(actualUserId);
+    
+    if (cachedAnalysis) {
+      console.log("✅ 저장된 분석 결과 발견! 재사용합니다.");
+      return NextResponse.json(cachedAnalysis);
+    }
+
+    console.log("📊 새로운 명리학 분석 시작...");
     console.log("📊 사주 기본 계산 시작...");
     // 사주 기본 계산
     const sajuProfile = getSajuProfile(birthDate, birthTime);
@@ -76,6 +94,11 @@ export async function POST(request: Request) {
       );
     }
 
+    // 분석 결과 저장
+    console.log("💾 분석 결과 저장 중...");
+    await saveMyeongriAnalysis(actualUserId, analysis);
+    console.log("✅ 분석 결과 저장 완료!");
+
     console.log("✅ 명리학 분석 완료!");
     return NextResponse.json(analysis);
   } catch (error: any) {
@@ -88,8 +111,43 @@ export async function POST(request: Request) {
 }
 
 /**
- * GET: 캐시된 분석 결과 조회 (추후 구현)
+ * GET: 저장된 분석 결과 조회
  */
 export async function GET() {
-  return NextResponse.json({ error: "Not implemented" }, { status: 501 });
+  try {
+    const cookieStore = cookies();
+    const userSaju = cookieStore.get("user_saju");
+
+    if (!userSaju) {
+      return NextResponse.json({ error: "No user info" }, { status: 401 });
+    }
+
+    const userData = JSON.parse(userSaju.value);
+    const { birthDate, birthTime, gender, userId } = userData;
+
+    if (!birthDate) {
+      return NextResponse.json({ error: "Birth date required" }, { status: 400 });
+    }
+
+    // 사용자 ID 확인 또는 생성
+    const actualUserId = userId || await getOrCreateUserId(birthDate, birthTime || null, gender || "O");
+    if (!actualUserId) {
+      return NextResponse.json({ error: "Failed to get user ID" }, { status: 500 });
+    }
+
+    // 저장된 분석 결과 조회
+    const analysis = await getMyeongriAnalysis(actualUserId);
+    
+    if (!analysis) {
+      return NextResponse.json({ error: "Analysis not found" }, { status: 404 });
+    }
+
+    return NextResponse.json(analysis);
+  } catch (error: any) {
+    console.error("Myeongri analysis GET error:", error);
+    return NextResponse.json(
+      { error: error.message || "Internal server error" },
+      { status: 500 }
+    );
+  }
 }

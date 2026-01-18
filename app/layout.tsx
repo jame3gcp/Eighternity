@@ -4,6 +4,8 @@ import "./globals.css";
 import Link from "next/link";
 import { User } from "lucide-react";
 import { Navigation } from "@/components/Navigation";
+import { LanguageProvider } from "@/lib/i18n/LanguageContext";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -26,25 +28,30 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body className={`${inter.className} selection:bg-indigo-100`}>
-        <div className="mobile-container flex flex-col min-h-screen">
-          <header className="sticky top-0 z-30 w-full bg-white/95 backdrop-blur-xl border-b border-gray-200 px-4 py-3 flex justify-between items-center">
-            <span className="text-xl font-bold text-gray-900 tracking-tight">
-              Eighternity
-            </span>
-            <Link 
-              href="/profile"
-              className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-200 transition-colors duration-200"
-            >
-              <User size={18} strokeWidth={2} />
-            </Link>
-          </header>
+        <LanguageProvider>
+          <div className="mobile-container flex flex-col min-h-screen">
+            <header className="sticky top-0 z-30 w-full bg-white/95 backdrop-blur-xl border-b border-gray-200 px-4 py-3 flex justify-between items-center">
+              <span className="text-xl font-bold text-gray-900 tracking-tight">
+                Eighternity
+              </span>
+              <div className="flex items-center gap-3">
+                <LanguageToggle />
+                <Link 
+                  href="/profile"
+                  className="w-9 h-9 rounded-full bg-gray-100 flex items-center justify-center text-gray-700 hover:bg-gray-200 transition-colors duration-200"
+                >
+                  <User size={18} strokeWidth={2} />
+                </Link>
+              </div>
+            </header>
 
-          <main className="flex-grow overflow-y-auto pb-20">
-            {children}
-          </main>
-          
-          <Navigation />
-        </div>
+            <main className="flex-grow overflow-y-auto pb-20">
+              {children}
+            </main>
+            
+            <Navigation />
+          </div>
+        </LanguageProvider>
       </body>
     </html>
   );

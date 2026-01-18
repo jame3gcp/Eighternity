@@ -148,10 +148,22 @@ export function analyzeTenGods(
   const allPillars = [pillars.year, pillars.month, pillars.day, pillars.hour];
   
   allPillars.forEach((pillar) => {
-    if (pillar === "未知") return;
+    if (!pillar || pillar === "未知") return;
+    
+    // pillar가 문자열이고 최소 2자 이상인지 확인
+    if (typeof pillar !== "string" || pillar.length < 2) {
+      console.warn(`⚠️ 유효하지 않은 기둥 값: ${pillar}`);
+      return;
+    }
     
     const tian = pillar[0];
     const di = pillar[1];
+    
+    // 천간과 지지가 유효한지 확인
+    if (!tian || !di) {
+      console.warn(`⚠️ 기둥에서 천간 또는 지지를 추출할 수 없음: ${pillar}`);
+      return;
+    }
     
     // 천간의 십성
     const tianTenGod = calculateTenGod(dayMaster, tian);

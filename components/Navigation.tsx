@@ -3,16 +3,18 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Home, MessageSquare, Calendar, User, Sparkles } from "lucide-react";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export function Navigation() {
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   const navItems = [
-    { href: "/home", icon: Home, label: "홈" },
-    { href: "/emotion", icon: Sparkles, label: "감정" },
-    { href: "/ask", icon: MessageSquare, label: "질문" },
-    { href: "/calendar", icon: Calendar, label: "달력" },
-    { href: "/profile", icon: User, label: "프로필" },
+    { href: "/home", icon: Home, label: t.nav.home },
+    { href: "/emotion", icon: Sparkles, label: t.nav.emotion },
+    { href: "/ask", icon: MessageSquare, label: t.nav.ask },
+    { href: "/calendar", icon: Calendar, label: t.nav.calendar },
+    { href: "/profile", icon: User, label: t.nav.profile },
   ];
 
   return (

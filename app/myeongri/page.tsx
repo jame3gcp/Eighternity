@@ -10,9 +10,11 @@ import { Sparkles, Loader2, CheckCircle2, XCircle, ChevronDown, ArrowLeft, Calen
 import { useRouter } from "next/navigation";
 import { Skeleton } from "@/components/Skeleton";
 import { Badge } from "@/components/Badge";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export default function MyeongriPage() {
   const router = useRouter();
+  const { t, language } = useLanguage();
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState<string | null>(null);
@@ -145,9 +147,8 @@ export default function MyeongriPage() {
           <div className="text-center space-y-6">
             <div className="space-y-2">
               <h2 className="text-2xl font-black text-slate-900">AI 명리학 분석</h2>
-              <p className="text-sm text-gray-600 leading-relaxed">
-                사주, 오행, 십성, 형충회합, 대운·세운을 종합적으로 분석하여<br />
-                성격, 직업, 재물, 건강, 인연에 대한 깊이 있는 해석을 제공합니다.
+              <p className="text-sm text-gray-600 leading-relaxed whitespace-pre-line">
+                {t.myeongri.description}
               </p>
             </div>
             <button
@@ -583,10 +584,7 @@ export default function MyeongriPage() {
                   <div key={key} className="p-5 bg-gradient-to-br from-slate-50 to-indigo-50 rounded-xl border-l-4 border-indigo-500">
                     <h3 className="text-lg font-bold text-gray-900 mb-3 flex items-center gap-2">
                       <span className="w-2 h-2 rounded-full bg-indigo-500"></span>
-                      {key === "personality" ? "성격" : 
-                       key === "career" ? "직업" : 
-                       key === "wealth" ? "재물" : 
-                       key === "health" ? "건강" : "인연"}
+                      {t.myeongri.analysisLabels[key as keyof typeof t.myeongri.analysisLabels] || key}
                     </h3>
                     <p className="text-base text-gray-700 leading-relaxed whitespace-pre-line">{value}</p>
                   </div>

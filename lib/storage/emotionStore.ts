@@ -55,13 +55,19 @@ export async function saveEmotionAnalysis(
         .single();
 
       if (!error && data) {
+        console.log(`[emotionStore] 저장 성공: id=${data.id}, user_id=${actualUserId}, date=${date}`);
+        
         // 감정 파형 포인트 저장
         if (analysis.emotionWave.points.length > 0) {
           // 기존 포인트 삭제
-          await supabase
+          const { error: deleteError } = await supabase
             .from("emotion_wave_points")
             .delete()
             .eq("analysis_id", data.id);
+
+          if (deleteError) {
+            console.warn(`[emotionStore] 기존 파형 포인트 삭제 오류:`, deleteError);
+          }
 
           // 새 포인트 삽입
           const points = analysis.emotionWave.points.map(point => ({
@@ -72,9 +78,15 @@ export async function saveEmotionAnalysis(
             context: point.context || null,
           }));
 
-          await supabase
+          const { error: insertError } = await supabase
             .from("emotion_wave_points")
             .insert(points);
+
+          if (insertError) {
+            console.warn(`[emotionStore] 파형 포인트 삽입 오류:`, insertError);
+          } else {
+            console.log(`[emotionStore] 파형 포인트 ${points.length}개 저장 완료`);
+          }
         }
 
         return {
@@ -112,6 +124,8 @@ export async function getEmotionAnalysis(
   userId: string,
   date: string
 ): Promise<EmotionArchive | null> {
+  console.log(`[emotionStore] getEmotionAnalysis 호출: userId=${userId}, date=${date}`);
+  
   // Supabase 조회 시도
   const supabase = await getSupabaseServerClient();
   if (supabase) {
@@ -119,6 +133,8 @@ export async function getEmotionAnalysis(
       const actualUserId = userId.includes("-") && userId.length === 36 
         ? userId 
         : userId;
+
+      console.log(`[emotionStore] Supabase 조회 시도: user_id=${actualUserId}, date=${date}`);
 
       const { data, error } = await supabase
         .from("emotion_analyses")
@@ -130,15 +146,30 @@ export async function getEmotionAnalysis(
         .eq("date", date)
         .single();
 
-      if (!error && data) {
+      if (error) {
+        // 406 에러는 "no rows returned"를 의미하므로 null 반환
+        if (error.code === "PGRST116") {
+          console.log(`[emotionStore] 분석 결과 없음 (PGRST116): user_id=${actualUserId}, date=${date}`);
+          // 메모리 스토어도 확인
+        } else {
+          console.warn(`[emotionStore] Supabase 조회 오류:`, error);
+          throw error;
+        }
+      } else if (data) {
+        console.log(`[emotionStore] 분석 결과 발견: id=${data.id}`);
+        
         // 감정 파형 포인트 조회
-        const { data: points } = await supabase
+        const { data: points, error: pointsError } = await supabase
           .from("emotion_wave_points")
           .select("*")
           .eq("analysis_id", data.id)
           .order("timestamp", { ascending: true });
 
-        return {
+        if (pointsError) {
+          console.warn(`[emotionStore] 파형 포인트 조회 오류:`, pointsError);
+        }
+
+        const result = {
           id: data.id,
           userId: actualUserId,
           date: data.date,
@@ -151,7 +182,7 @@ export async function getEmotionAnalysis(
                 intensity: p.intensity,
                 context: p.context,
               })) || [],
-              summary: (data.emotion_wave as any).summary || "",
+              summary: (data.emotion_wave as any)?.summary || "",
             },
             patternType: data.pattern_type as any,
             patternConfidence: data.pattern_confidence,
@@ -163,15 +194,28 @@ export async function getEmotionAnalysis(
           },
           createdAt: data.created_at,
         };
+        
+        console.log(`[emotionStore] 분석 결과 반환 성공`);
+        return result;
       }
-    } catch (error) {
-      console.warn("Supabase get error, falling back to memory store:", error);
+    } catch (error: any) {
+      console.warn(`[emotionStore] Supabase 조회 중 예외 발생:`, error.message);
+      // 에러가 발생해도 메모리 스토어 확인 계속 진행
     }
+  } else {
+    console.log(`[emotionStore] Supabase 클라이언트 없음, 메모리 스토어 확인`);
   }
 
   // 메모리 저장소에서 조회 (폴백)
   const key = `${userId}-${date}`;
-  return memoryStore.get(key) || null;
+  const memoryResult = memoryStore.get(key);
+  if (memoryResult) {
+    console.log(`[emotionStore] 메모리 스토어에서 발견: key=${key}`);
+    return memoryResult;
+  }
+  
+  console.log(`[emotionStore] 분석 결과 없음: key=${key}`);
+  return null;
 }
 
 /**

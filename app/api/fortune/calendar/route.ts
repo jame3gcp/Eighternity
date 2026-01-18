@@ -5,8 +5,11 @@ import { ruleEngine } from "../../../../lib/engine/ruleEngine";
 // 동적 라우트로 명시 (cookies 사용)
 export const dynamic = 'force-dynamic';
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    const { searchParams } = new URL(request.url);
+    const lang = (searchParams.get("lang") as "ko" | "en") || "ko";
+    
     const cookieStore = cookies();
     const userSaju = cookieStore.get("user_saju");
 

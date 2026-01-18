@@ -40,6 +40,8 @@ export async function POST(request: Request) {
       birthTime: validated.birthTime,
       gender: validated.gender,
       fiveElements: profile.fiveElements,
+      pillars: profile.pillars, // 사주 4주 저장
+      dayMaster: profile.dayMaster, // 일간 저장
       userId: userId, // UUID 저장
     }), { path: "/", maxAge: 60 * 60 * 24 * 7 });
     

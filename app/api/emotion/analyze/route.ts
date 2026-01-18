@@ -45,11 +45,38 @@ export async function POST(request: Request) {
     console.log("  - 분석 기간:", validated.period);
     console.log("  - 분석 날짜:", validated.date || "오늘");
 
+    // 오늘 날짜 확인
+    const targetDate = validated.date || new Date().toISOString().split("T")[0];
+    
+    console.log("🔍 캐시 확인 중...");
+    console.log("  - 사용자 ID:", actualUserId);
+    console.log("  - 대상 날짜:", targetDate);
+    
+    // 같은 날짜에 이미 분석 결과가 있는지 확인
+    const { getEmotionAnalysis } = await import("@/lib/storage/emotionStore");
+    let existingAnalysis = null;
+    
+    try {
+      existingAnalysis = await getEmotionAnalysis(actualUserId, targetDate);
+      
+      if (existingAnalysis) {
+        console.log("✅ 기존 분석 결과 발견, DB에서 반환");
+        console.log("  - 분석 ID:", existingAnalysis.id);
+        console.log("  - 생성일:", existingAnalysis.createdAt);
+        return NextResponse.json(existingAnalysis.analysis);
+      } else {
+        console.log("❌ 기존 분석 결과 없음, 새로 분석 필요");
+      }
+    } catch (cacheError: any) {
+      console.warn("⚠️ 캐시 조회 중 오류 발생, 새로 분석 수행:", cacheError.message);
+      // 캐시 조회 실패해도 계속 진행
+    }
+
+    console.log("🔄 새로운 분석 수행");
+
     // 라이프 로그 수집
     let lifeLogs: any[] = [];
     if (validated.includeLifeLog) {
-      const targetDate = validated.date || new Date().toISOString().split("T")[0];
-      
       if (validated.period === "day") {
         // 하루치 데이터
         const log = await lifelogStore.get(actualUserId, targetDate);
@@ -132,12 +159,16 @@ export async function POST(request: Request) {
     console.log("✅ 감정 분석 완료!");
     
     // 분석 결과 저장
-    const targetDate = validated.date || new Date().toISOString().split("T")[0];
     try {
-      await saveEmotionAnalysis(actualUserId, targetDate, analysis);
-      console.log("💾 감정 분석 결과 저장 완료");
-    } catch (saveError) {
-      console.warn("⚠️ 감정 분석 결과 저장 실패:", saveError);
+      console.log("💾 감정 분석 결과 저장 시도...");
+      const saved = await saveEmotionAnalysis(actualUserId, targetDate, analysis);
+      if (saved) {
+        console.log("✅ 감정 분석 결과 저장 완료:", saved.id);
+      } else {
+        console.warn("⚠️ 감정 분석 결과 저장 실패: null 반환");
+      }
+    } catch (saveError: any) {
+      console.error("❌ 감정 분석 결과 저장 중 오류:", saveError.message);
       // 저장 실패해도 분석 결과는 반환
     }
     

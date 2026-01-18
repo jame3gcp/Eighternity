@@ -1,15 +1,17 @@
 import { QuestionCategory } from "../lib/contracts/fortune";
 import { Users, Heart, Coins, Phone, MapPin } from "lucide-react";
-
-const categories: { id: QuestionCategory; label: string; icon: any; color: string }[] = [
-  { id: "meeting", label: "만남", icon: Users, color: "text-blue-500 bg-blue-50" },
-  { id: "love", label: "연애", icon: Heart, color: "text-rose-500 bg-rose-50" },
-  { id: "money", label: "재물", icon: Coins, color: "text-amber-500 bg-amber-50" },
-  { id: "contact", label: "연락", icon: Phone, color: "text-green-500 bg-green-50" },
-  { id: "move", label: "이동", icon: MapPin, color: "text-purple-500 bg-purple-50" },
-];
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 export const CategoryButtons = ({ onSelect }: { onSelect: (id: QuestionCategory) => void }) => {
+  const { t } = useLanguage();
+  
+  const categories: { id: QuestionCategory; label: string; icon: any; color: string }[] = [
+    { id: "meeting", label: t.ask.categories.meeting, icon: Users, color: "text-blue-500 bg-blue-50" },
+    { id: "love", label: t.ask.categories.love, icon: Heart, color: "text-rose-500 bg-rose-50" },
+    { id: "money", label: t.ask.categories.money, icon: Coins, color: "text-amber-500 bg-amber-50" },
+    { id: "contact", label: t.ask.categories.contact, icon: Phone, color: "text-green-500 bg-green-50" },
+    { id: "move", label: t.ask.categories.move, icon: MapPin, color: "text-purple-500 bg-purple-50" },
+  ];
   return (
     <div className="grid grid-cols-5 gap-3 px-2">
       {categories.map((cat, i) => (

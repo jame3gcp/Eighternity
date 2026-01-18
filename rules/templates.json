@@ -1,32 +1,66 @@
 {
-  "today": [
-    "오늘은 {message} {recommend}을(를) 추천하며, {avoid}은(는) 피하는 것이 좋습니다.",
-    "기운의 흐름을 보니 {message} 특히 {recommend}가 운을 높여줍니다.",
-    "전반적인 운세는 {message} {avoid}에 유의하며 하루를 보내세요.",
-    "하늘의 조언: {message} 당신의 행운 아이템은 {recommend}입니다."
-  ],
-  "question": {
-    "meeting": [
-      "오늘의 만남은 긍정적입니다. 상대방의 의견을 경청하면 뜻밖의 수확이 있을 것입니다.",
-      "새로운 사람보다는 구면인 사람과의 관계에 집중하는 것이 유리한 하루입니다."
+  "ko": {
+    "today": [
+      "오늘은 {message} {recommend}을(를) 추천하며, {avoid}은(는) 피하는 것이 좋습니다.",
+      "기운의 흐름을 보니 {message} 특히 {recommend}가 운을 높여줍니다.",
+      "전반적인 운세는 {message} {avoid}에 유의하며 하루를 보내세요.",
+      "하늘의 조언: {message} 당신의 행운 아이템은 {recommend}입니다."
     ],
-    "love": [
-      "연애운이 상승 곡선을 타고 있습니다. 솔직한 감정 표현이 매력을 더해줍니다.",
-      "작은 오해가 생길 수 있으니, 대화할 때 부드러운 말투를 유지하세요."
-    ],
-    "money": [
-      "지출보다는 저축에 무게를 두어야 할 시기입니다. 충동구매를 멀리하세요.",
-      "금전적인 기회가 찾아올 수 있습니다. 빠른 판단력이 필요합니다."
-    ],
-    "contact": [
-      "기다리던 연락이 올 가능성이 높습니다. 핸드폰을 가까이 하세요.",
-      "먼저 연락을 취해보는 것도 좋습니다. 상대방도 당신을 기다리고 있을지 모릅니다."
-    ],
-    "move": [
-      "가까운 거리의 이동은 기분 전환에 큰 도움이 됩니다. 산책을 추천합니다.",
-      "이사를 고민 중이라면 오늘은 정보를 수집하기에 좋은 날입니다."
-    ]
+    "question": {
+      "meeting": [
+        "오늘의 만남은 긍정적입니다. 상대방의 의견을 경청하면 뜻밖의 수확이 있을 것입니다.",
+        "새로운 사람보다는 구면인 사람과의 관계에 집중하는 것이 유리한 하루입니다."
+      ],
+      "love": [
+        "연애운이 상승 곡선을 타고 있습니다. 솔직한 감정 표현이 매력을 더해줍니다.",
+        "작은 오해가 생길 수 있으니, 대화할 때 부드러운 말투를 유지하세요."
+      ],
+      "money": [
+        "지출보다는 저축에 무게를 두어야 할 시기입니다. 충동구매를 멀리하세요.",
+        "금전적인 기회가 찾아올 수 있습니다. 빠른 판단력이 필요합니다."
+      ],
+      "contact": [
+        "기다리던 연락이 올 가능성이 높습니다. 핸드폰을 가까이 하세요.",
+        "먼저 연락을 취해보는 것도 좋습니다. 상대방도 당신을 기다리고 있을지 모릅니다."
+      ],
+      "move": [
+        "가까운 거리의 이동은 기분 전환에 큰 도움이 됩니다. 산책을 추천합니다.",
+        "이사를 고민 중이라면 오늘은 정보를 수집하기에 좋은 날입니다."
+      ]
+    },
+    "recommendations": ["푸른색 옷", "따뜻한 차 한 잔", "일찍 귀가하기", "독서", "가벼운 운동", "명상", "친구와의 통화", "노란색 액세서리"],
+    "avoidances": ["매운 음식", "늦은 밤 외출", "큰 액수 거래", "말다툼", "무리한 스케줄", "과음", "낯선 장소", "검은색 옷"]
   },
-  "recommendations": ["푸른색 옷", "따뜻한 차 한 잔", "일찍 귀가하기", "독서", "가벼운 운동", "명상", "친구와의 통화", "노란색 액세서리"],
-  "avoidances": ["매운 음식", "늦은 밤 외출", "큰 액수 거래", "말다툼", "무리한 스케줄", "과음", "낯선 장소", "검은색 옷"]
+  "en": {
+    "today": [
+      "Today, {message} We recommend {recommend}, and it's best to avoid {avoid}.",
+      "Looking at the energy flow, {message} especially {recommend} will boost your luck.",
+      "The overall fortune is {message} Be mindful of {avoid} as you spend your day.",
+      "Heavenly advice: {message} Your lucky item is {recommend}."
+    ],
+    "question": {
+      "meeting": [
+        "Today's meeting is positive. Listening to the other person's opinion will bring unexpected gains.",
+        "Focusing on existing relationships rather than new people is advantageous today."
+      ],
+      "love": [
+        "Your love luck is on an upward trend. Honest expression of feelings adds to your charm.",
+        "Small misunderstandings may occur, so maintain a soft tone when talking."
+      ],
+      "money": [
+        "It's a time to prioritize savings over spending. Stay away from impulse purchases.",
+        "Financial opportunities may come your way. Quick judgment is needed."
+      ],
+      "contact": [
+        "There's a high chance the contact you've been waiting for will arrive. Keep your phone close.",
+        "It's also good to reach out first. The other person might be waiting for you too."
+      ],
+      "move": [
+        "Moving a short distance is a great help for a change of pace. We recommend a walk.",
+        "If you're considering moving, today is a good day to gather information."
+      ]
+    },
+    "recommendations": ["Blue clothes", "A cup of warm tea", "Going home early", "Reading", "Light exercise", "Meditation", "Calling a friend", "Yellow accessories"],
+    "avoidances": ["Spicy food", "Going out late at night", "Large financial transactions", "Arguments", "Excessive schedule", "Excessive drinking", "Unfamiliar places", "Black clothes"]
+  }
 }

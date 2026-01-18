@@ -7,27 +7,13 @@
 
 import { PatternType } from "@/lib/contracts/emotion";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface EmotionPatternCardProps {
   patternType: PatternType;
   confidence: number;
+  language?: "ko" | "en";
 }
-
-const patternLabels: Record<PatternType, string> = {
-  emotional: "정서형",
-  analytical: "사고형",
-  avoidant: "회피형",
-  immersive: "몰입형",
-  empathetic: "공감형",
-};
-
-const patternDescriptions: Record<PatternType, string> = {
-  emotional: "감정 변화가 크고 표현이 풍부한 유형",
-  analytical: "논리적이고 분석적인 사고를 선호하는 유형",
-  avoidant: "감정 회피 경향이 있는 유형",
-  immersive: "깊이 몰입하는 경향이 있는 유형",
-  empathetic: "타인의 감정에 민감하고 공감 능력이 뛰어난 유형",
-};
 
 const patternColors: Record<PatternType, string> = {
   emotional: "from-pink-500 to-rose-500",
@@ -37,7 +23,9 @@ const patternColors: Record<PatternType, string> = {
   empathetic: "from-green-500 to-emerald-500",
 };
 
-export function EmotionPatternCard({ patternType, confidence }: EmotionPatternCardProps) {
+export function EmotionPatternCard({ patternType, confidence, language: propLanguage }: EmotionPatternCardProps) {
+  const { t, language: contextLanguage } = useLanguage();
+  const language = propLanguage || contextLanguage;
   const confidencePercent = Math.round(confidence * 100);
 
   return (
@@ -45,10 +33,10 @@ export function EmotionPatternCard({ patternType, confidence }: EmotionPatternCa
       <div className="flex items-start justify-between mb-4">
         <div>
           <h3 className="text-lg font-black text-gray-900 mb-1">
-            {patternLabels[patternType]}
+            {t.emotion.patternTypes[patternType]}
           </h3>
           <p className="text-sm text-gray-600">
-            {patternDescriptions[patternType]}
+            {t.emotion.patternDescriptions[patternType]}
           </p>
         </div>
         <div className={cn(
@@ -62,7 +50,7 @@ export function EmotionPatternCard({ patternType, confidence }: EmotionPatternCa
       <div className="mt-4">
         <div className="flex items-center justify-between mb-2">
           <span className="text-xs font-bold text-gray-500 uppercase tracking-widest">
-            패턴 일치도
+            {t.emotion.patternMatch}
           </span>
           <span className="text-sm font-bold text-gray-900">
             {confidencePercent}%

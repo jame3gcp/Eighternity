@@ -6,18 +6,22 @@
 "use client";
 
 import { BehaviorCorrelation, EmotionType } from "@/lib/contracts/emotion";
-import { emotionLabels } from "./EmotionWaveGraph";
 import { cn } from "@/lib/utils";
+import { useLanguage } from "@/lib/i18n/LanguageContext";
 
 interface BehaviorHeatmapProps {
   correlations: BehaviorCorrelation[];
+  language?: "ko" | "en";
 }
 
-export function BehaviorHeatmap({ correlations }: BehaviorHeatmapProps) {
+export function BehaviorHeatmap({ correlations, language: propLanguage }: BehaviorHeatmapProps) {
+  const { t, language: contextLanguage } = useLanguage();
+  const language = propLanguage || contextLanguage;
+
   if (correlations.length === 0) {
     return (
       <div className="flex items-center justify-center h-[200px] text-gray-400">
-        <p>행동 상관 데이터가 없습니다</p>
+        <p>{t.emotion.noBehaviorData}</p>
       </div>
     );
   }
@@ -35,11 +39,11 @@ export function BehaviorHeatmap({ correlations }: BehaviorHeatmapProps) {
   };
 
   const getCorrelationText = (correlation: number) => {
-    if (correlation > 0.5) return "강한 양의 상관";
-    if (correlation > 0.2) return "양의 상관";
-    if (correlation > -0.2) return "무상관";
-    if (correlation > -0.5) return "음의 상관";
-    return "강한 음의 상관";
+    if (correlation > 0.5) return t.emotion.strongPositive;
+    if (correlation > 0.2) return t.emotion.positive;
+    if (correlation > -0.2) return t.emotion.noCorrelation;
+    if (correlation > -0.5) return t.emotion.negative;
+    return t.emotion.strongNegative;
   };
 
   return (
@@ -49,19 +53,19 @@ export function BehaviorHeatmap({ correlations }: BehaviorHeatmapProps) {
           <thead>
             <tr>
               <th className="p-3 text-left text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200">
-                행동
+                {t.emotion.behavior}
               </th>
               <th className="p-3 text-center text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200">
-                감정
+                {t.emotion.emotion}
               </th>
               <th className="p-3 text-center text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200">
-                빈도
+                {t.emotion.frequency}
               </th>
               <th className="p-3 text-center text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200">
-                상관계수
+                {t.emotion.correlationCoefficient}
               </th>
               <th className="p-3 text-center text-xs font-bold text-gray-500 uppercase tracking-widest border-b border-gray-200">
-                관계
+                {t.emotion.relationship}
               </th>
             </tr>
           </thead>
@@ -82,7 +86,7 @@ export function BehaviorHeatmap({ correlations }: BehaviorHeatmapProps) {
                     </td>
                   )}
                   <td className="p-3 text-sm text-gray-700 border-b border-gray-100 text-center">
-                    {emotionLabels[corr.emotion]}
+                    {t.emotion.emotionLabels[corr.emotion]}
                   </td>
                   <td className="p-3 text-sm text-gray-700 border-b border-gray-100 text-center">
                     {corr.frequency}

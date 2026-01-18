@@ -32,6 +32,8 @@ export const UserSajuCookieSchema = z.object({
   birthTime: z.string().nullable(),
   gender: z.enum(["M", "F", "O"]).optional(),
   fiveElements: FiveElementsSchema,
+  pillars: SajuPillarsSchema.optional(), // 사주 4주 (저장된 값 사용)
+  dayMaster: z.string().optional(), // 일간 (저장된 값 사용)
   userId: z.string().optional(),
 });
 

@@ -92,5 +92,8 @@ export { buildMyeongriPrompt, MYEONGRI_RESPONSE_FORMAT } from "./myeongri";
 // 감정 분석 프롬프트 export
 export { buildEmotionAnalysisPrompt, EMOTION_SYSTEM_PROMPT } from "./emotion";
 
+// 질문 답변 프롬프트 export
+export { getQuestionSystemPrompt, createQuestionPrompt, questionTemplates } from "./question";
+
 // 템플릿 유틸리티 export
 export { combinePrompt, replaceVariables, addSection } from "./templates";

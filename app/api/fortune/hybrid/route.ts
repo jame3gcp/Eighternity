@@ -25,6 +25,7 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const date = searchParams.get("date") || new Date().toISOString().split("T")[0];
     const includeLifeLog = searchParams.get("includeLifeLog") !== "false";
+    const lang = (searchParams.get("lang") as "ko" | "en") || "ko";
 
     const userData = JSON.parse(userSaju.value);
     const { birthDate, birthTime, fiveElements: cachedFiveElements } = userData;
@@ -33,7 +34,7 @@ export async function GET(request: Request) {
     const sajuProfile = getSajuProfile(birthDate, birthTime);
     
     // 사주 기반 운세 계산
-    const sajuFortune = ruleEngine.today(sajuProfile.fiveElements);
+    const sajuFortune = ruleEngine.today(sajuProfile.fiveElements, lang);
 
     // 라이프 로그 조회
     let lifeLog: LifeLogRequest | null = null;
@@ -58,7 +59,8 @@ export async function GET(request: Request) {
       sajuProfile.fiveElements,
       sajuFortune.globalScore,
       sajuFortune.mainMessage,
-      lifeLog
+      lifeLog,
+      lang
     );
 
     return NextResponse.json(hybridRecommendation);
